@@ -1,156 +1,121 @@
-#README.md
+<div align="center">
 
-1. Banner
-2. Project Overview
-3. Motivation
-4. System Architecture
-5. Repository Structure
-6. Accelerator Architecture
-7. Descriptor-Based Execution
-8. Hardware Pipeline
-9. Memory Map
-10. Verification
-11. Build Instructions
-12. Current Features
-13. Future Roadmap
-14. References
+# RISC-V Binary Neural Network (BNN) Accelerator
 
+### Descriptor-Based AI Accelerator in SystemVerilog
 
-# RISC-V Binary Neural Network Accelerator
+*A configurable Binary Neural Network inference accelerator integrated with a PicoRV32 RISC-V processor through an AXI4-Lite interface.*
 
-A configurable hardware accelerator for Binary Neural Network (BNN) inference,
-implemented in SystemVerilog and integrated into a custom PicoRV32-based SoC.
+![Status](https://img.shields.io/badge/Status-Active%20Development-blue)
+![Language](https://img.shields.io/badge/SystemVerilog-RTL-orange)
+![CPU](https://img.shields.io/badge/CPU-PicoRV32-green)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-The project explores software-programmable AI acceleration through descriptor-based
-execution, modular RTL design, and memory-mapped hardware control.
-Project Goals
-## Project Goals
+</div>
 
-The objective of this project is to design a reusable AI accelerator rather than
-a fixed-function neural network implementation.
+---
 
-The architecture focuses on:
+# Overview
 
-- Descriptor-driven execution
-- Modular RTL
-- AXI4-Lite software configuration
-- Binary Neural Network inference
-- Multi-layer execution
-- FPGA deployment
-- Future ASIC portability
-Architecture
-                    PicoRV32 CPU
-                          │
-                    AXI4-Lite Master
-                          │
-                  AXI Interconnect
-                          │
-          ┌───────────────┴────────────────┐
-          │                                │
-          ▼                                ▼
-    Instruction RAM                 BNN AXI Wrapper
-                                            │
-                  ┌─────────────────────────┴────────────────────┐
-                  │                                              │
-                  │ Control Registers                            │
-                  │ Descriptor Memory                            │
-                  │ Status Registers                             │
-                  └─────────────────────────┬────────────────────┘
-                                            │
-                                  current_desc
-                                            │
-                                            ▼
+This project implements a **software-programmable Binary Neural Network (BNN) accelerator** built completely in **SystemVerilog RTL**.
+
+Unlike fixed-function AI accelerators, this design follows a **descriptor-based execution model**, where the RISC-V processor programs an entire neural network before execution begins. The accelerator then executes each layer autonomously without requiring CPU intervention between layers.
+
+The long-term objective is to evolve this project from a Binary Neural Network accelerator into a scalable low-precision AI accelerator supporting INT8, INT4 and convolutional workloads.
+
+---
+
+# Project Goals
+
+- Build a configurable Binary Neural Network accelerator
+- Integrate with a custom PicoRV32 SoC
+- Design a reusable descriptor-based execution engine
+- Learn production-style RTL design methodology
+- Develop a modular architecture that can evolve toward FPGA and ASIC implementations
+
+---
+
+# System Architecture
+
+```
+                         PicoRV32 CPU
+                              │
+                      AXI4-Lite Master
+                              │
+                      AXI Interconnect
+                              │
+          ┌───────────────────┴────────────────────┐
+          │                                        │
+          ▼                                        ▼
+ Instruction / Data RAM                     BNN AXI Wrapper
+                                                    │
+        ┌───────────────────────────────────────────┴────────────────────────┐
+        │                                                                    │
+        │  Control Registers                                                 │
+        │      • START                                                       │
+        │      • STATUS                                                      │
+        │      • NUM_LAYERS                                                  │
+        │                                                                    │
+        │  Descriptor Memory                                                 │
+        │      • Layer 0                                                     │
+        │      • Layer 1                                                     │
+        │      • Layer 2                                                     │
+        │      • ...                                                         │
+        └──────────────────────────────────┬─────────────────────────────────┘
+                                           │
+                                     current_desc
+                                           │
+                                           ▼
                                       BNN Core FSM
-                                            │
-                                     Processing Elements
-                                            │
-                                      Output Memory
-Project Components
-Explain each module.
-Example:
-## PicoRV32
+                                           │
+                         ┌─────────────────┴────────────────┐
+                         │                                  │
+                         ▼                                  ▼
+                 Address Generation                Processing Elements
+                         │                                  │
+                         └─────────────────┬────────────────┘
+                                           │
+                                           ▼
+                                   Output Activation RAM
+```
 
-Acts as the software host processor.
+---
 
-Responsibilities:
+# Execution Flow
 
-- Configure accelerator
-- Populate descriptor table
-- Start inference
-- Monitor completion
-## BNN AXI Wrapper
+Unlike traditional software-controlled accelerators, the CPU configures the complete neural network before inference starts.
 
-The AXI wrapper forms the software-visible interface of the accelerator.
-
-Responsibilities
-
-- AXI4-Lite Slave
-- Descriptor storage
-- Control registers
-- Status registers
-- Interface between firmware and execution engine
-
-The wrapper does not execute neural network computations.
-## BNN Core
-
-The execution engine of the accelerator.
-
-Responsibilities
-
-- Execute one neural network layer
-- Fetch descriptor
-- Configure working registers
-- Schedule processing elements
-- Generate memory addresses
-- Advance layer index
-Descriptor Architecture
-This deserves an entire section.
+```
 Firmware
 
-↓
+        │
 
-Layer Descriptors
+        ▼
 
-↓
+Generate Layer Descriptors
 
-AXI Wrapper
+        │
 
-↓
+        ▼
 
-Descriptor Table
+Write Descriptor Table
+through AXI4-Lite
 
-↓
+        │
 
-current_desc
+        ▼
 
-↓
+BNN AXI Wrapper
 
-CONFIGURE_LAYER
+        │
 
-↓
-
-Execution
-Then explain:
-Each layer is described by
-Input address
-Weight address
-Threshold address
-Number of input words
-Number of output neurons
-Software programs the complete descriptor table before inference begins.
-The execution engine autonomously processes each descriptor without further CPU intervention.
-Processing Flow
-CPU
-
-↓
-
-Populate Descriptor Table
-
-↓
+        ▼
 
 START
 
-↓
+        │
+
+        ▼
 
 Layer 0
 
@@ -164,35 +129,181 @@ Layer 2
 
 ↓
 
+...
+
+↓
+
 DONE
-Repository Structure
-rtl/
+```
 
-    bnn_core.sv
-    bnn_axi_wrapper.sv
-    processing_element.sv
-    ...
+Once started, the hardware executes every layer autonomously.
 
-tb/
+---
 
-firmware/
+# Descriptor-Based Architecture
 
-docs/
+Each neural network layer is represented by a descriptor containing all information required for execution.
 
-README.md
-Current Features
-## Current Features
+```
+Layer Descriptor
 
-- RV32I Host Processor (PicoRV32)
-- SystemVerilog RTL
-- Binary Processing Elements
-- Multi-state Controller FSM
-- Descriptor-based execution architecture
-- AXI4-Lite configuration interface
-- Modular processing pipeline
-- Cocotb / Verilator verification environment
-Verification
-Explain
++---------------------------+
+| Input Base Address        |
++---------------------------+
+| Weight Base Address       |
++---------------------------+
+| Threshold Base Address    |
++---------------------------+
+| Number of Input Words     |
++---------------------------+
+| Number of Output Neurons  |
++---------------------------+
+```
+
+The AXI wrapper stores every descriptor inside a descriptor table.
+
+The BNN core requests one descriptor at a time using its current layer index.
+
+```
+Descriptor Table
+
+Layer 0
+
+↓
+
+Layer 1
+
+↓
+
+Layer 2
+
+↓
+
+...
+
+↓
+
+current_desc
+
+↓
+
+BNN Core
+```
+
+This keeps the execution engine completely independent from software configuration.
+
+---
+
+# Hardware Modules
+
+## PicoRV32
+
+Acts as the host processor responsible for:
+
+- Configuring the accelerator
+- Programming descriptor memory
+- Starting inference
+- Monitoring completion
+
+---
+
+## AXI4-Lite Wrapper
+
+The wrapper provides the software-visible interface.
+
+Responsibilities include:
+
+- AXI4-Lite slave interface
+- Control registers
+- Status registers
+- Descriptor storage
+- Descriptor lookup
+- Interface between firmware and execution engine
+
+The wrapper **does not perform neural network computation**.
+
+---
+
+## BNN Core
+
+The BNN Core is the execution engine.
+
+Responsibilities include:
+
+- Fetching layer descriptors
+- Configuring execution registers
+- Scheduling processing elements
+- Address generation
+- Layer sequencing
+- Multi-layer execution
+
+---
+
+## Processing Elements
+
+Each Processing Element performs Binary Neural Network computations using XNOR-Popcount operations.
+
+Multiple PEs execute in parallel to improve inference throughput.
+
+---
+
+# Repository Structure
+
+```
+.
+├── rtl/
+│   ├── bnn_core.sv
+│   ├── bnn_axi_wrapper.sv
+│   ├── processing_element.sv
+│   ├── memory.sv
+│   ├── controller.sv
+│   └── ...
+│
+├── firmware/
+│
+├── tb/
+│
+├── docs/
+│
+└── README.md
+```
+
+---
+
+# Current Features
+
+- PicoRV32 Host Processor
+- SystemVerilog RTL Design
+- AXI4-Lite Accelerator Interface
+- Descriptor-Based Layer Scheduling
+- Multi-Layer Execution Architecture
+- Modular Processing Elements
+- FSM-Based Controller
+- Cocotb Verification
+- Verilator Simulation
+
+---
+
+# Design Philosophy
+
+This project follows a modular hardware architecture inspired by modern AI accelerators.
+
+The design separates software configuration from hardware execution.
+
+- Firmware describes the neural network.
+- The AXI wrapper stores configuration data.
+- The BNN core performs execution.
+- Processing elements perform computation.
+
+This separation allows future architectural improvements without redesigning the execution engine.
+
+---
+
+# Verification
+
+Current verification flow:
+
+```
 RTL
 
 ↓
@@ -205,33 +316,84 @@ Cocotb
 
 ↓
 
-Python Tests
+Python Testbench
 
 ↓
 
 Waveform Analysis
-Future Work
-This is where I'd mention ideas such as:
-## Future Work
+```
+
+Each module is verified independently before integration.
+
+---
+
+# Future Roadmap
 
 ### Near-Term
 
-- Descriptor memory integration
-- AXI address decoder refinement
+- Complete descriptor memory implementation
+- Improve AXI register map
 - Interrupt support
-- Double buffering
 - Performance benchmarking
+- FPGA deployment
 
 ### Medium-Term
 
-- DMA-based memory transfers
-- INT8 and INT4 datapaths
-- Convolutional neural network support
-- Model compiler from PyTorch
+- DMA engine
+- Double buffering
+- AXI Master interface
+- INT8 inference support
+- INT4 inference support
+- Convolution support
 
 ### Long-Term
 
-- FPGA implementation
-- ASIC-oriented synthesis exploration
-- Open-source physical design exploration using the SkyWater 130 nm PDK and OpenLane/OpenROAD flow
-- Evaluate feasibility for platforms such as TinyTapeout, subject to area and resource constraints
+- PyTorch model compiler
+- Automated descriptor generation
+- FPGA optimization
+- ASIC-oriented implementation
+- Physical design exploration using the SkyWater SKY130 PDK with OpenLane/OpenROAD
+- Evaluate a reduced configuration suitable for TinyTapeout
+
+---
+
+# Learning Objectives
+
+This project is primarily intended as an exploration of modern computer architecture and AI hardware design.
+
+Topics explored include:
+
+- Computer Architecture
+- RTL Design
+- SystemVerilog
+- AXI4-Lite
+- Hardware/Software Co-design
+- Binary Neural Networks
+- FPGA Design
+- Verification Methodologies
+- RISC-V SoC Design
+
+---
+
+# References
+
+- PicoRV32
+- RISC-V ISA Specification
+- Google TPU v1
+- Eyeriss
+- FINN
+- AXI4-Lite Specification
+
+---
+
+## License
+
+MIT License
+
+---
+
+<div align="center">
+
+**Built using SystemVerilog • PicoRV32 • Cocotb • Verilator**
+
+</div>

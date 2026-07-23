@@ -1,0 +1,7 @@
+@00000000
+80000537    // lui a0, 0x80000      ; Load upper 20 bits of MMIO address (0x80000000) into a0
+00000013    // nop                  ; Pseudo-instruction (addi x0, x0, 0)
+00000013    // nop                  ; Pseudo-instruction (addi x0, x0, 0)
+00000013    // nop                  ; Pseudo-instruction (addi x0, x0, 0)
+00b52023    // sw a1, 0(a0)         ; FIXED: Store data from a1 into the address held by a0 (0x80000000)
+0000006f    // jal x0, 0            ; Infinite loop (jump to self) to halt execution

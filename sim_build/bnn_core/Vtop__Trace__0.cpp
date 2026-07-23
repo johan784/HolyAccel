@@ -1,0 +1,554 @@
+// Verilated -*- C++ -*-
+// DESCRIPTION: Verilator output: Tracing implementation internals
+
+#include "verilated_vcd_c.h"
+#include "Vtop__Syms.h"
+
+
+void Vtop___024root__trace_chg_0_sub_0(Vtop___024root* vlSelf, VerilatedVcd::Buffer* bufp);
+
+void Vtop___024root__trace_chg_0(void* voidSelf, VerilatedVcd::Buffer* bufp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root__trace_chg_0\n"); );
+    // Body
+    Vtop___024root* const __restrict vlSelf VL_ATTR_UNUSED = static_cast<Vtop___024root*>(voidSelf);
+    Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    if (VL_UNLIKELY(!vlSymsp->__Vm_activity)) return;
+    Vtop___024root__trace_chg_0_sub_0((&vlSymsp->TOP), bufp);
+}
+
+void Vtop___024root__trace_chg_0_sub_0(Vtop___024root* vlSelf, VerilatedVcd::Buffer* bufp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root__trace_chg_0_sub_0\n"); );
+    Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Body
+    uint32_t* const oldp VL_ATTR_UNUSED = bufp->oldp(vlSymsp->__Vm_baseCode + 1);
+    bufp->chgBit(oldp+0,(vlSelfRef.clk));
+    bufp->chgBit(oldp+1,(vlSelfRef.rstn));
+    bufp->chgBit(oldp+2,(vlSelfRef.start));
+    bufp->chgIData(oldp+3,(vlSelfRef.in_ptr),32);
+    bufp->chgIData(oldp+4,(vlSelfRef.wt_ptr),32);
+    bufp->chgIData(oldp+5,(vlSelfRef.thr_ptr),32);
+    bufp->chgIData(oldp+6,(vlSelfRef.inp_bram_addr),32);
+    bufp->chgIData(oldp+7,(vlSelfRef.inp_bram_dout),32);
+    bufp->chgIData(oldp+8,(vlSelfRef.wt_bram_addr),32);
+    bufp->chgIData(oldp+9,(vlSelfRef.wt_bram_dout),32);
+    bufp->chgBit(oldp+10,(vlSelfRef.busy));
+    bufp->chgBit(oldp+11,(vlSelfRef.done));
+    bufp->chgIData(oldp+12,(vlSelfRef.result),32);
+    bufp->chgBit(oldp+13,(vlSelfRef.bnn_core__DOT__clk));
+    bufp->chgBit(oldp+14,(vlSelfRef.bnn_core__DOT__rstn));
+    bufp->chgBit(oldp+15,(vlSelfRef.bnn_core__DOT__start));
+    bufp->chgIData(oldp+16,(vlSelfRef.bnn_core__DOT__in_ptr),32);
+    bufp->chgIData(oldp+17,(vlSelfRef.bnn_core__DOT__wt_ptr),32);
+    bufp->chgIData(oldp+18,(vlSelfRef.bnn_core__DOT__thr_ptr),32);
+    bufp->chgIData(oldp+19,(vlSelfRef.bnn_core__DOT__inp_bram_addr),32);
+    bufp->chgIData(oldp+20,(vlSelfRef.bnn_core__DOT__inp_bram_dout),32);
+    bufp->chgIData(oldp+21,(vlSelfRef.bnn_core__DOT__wt_bram_addr),32);
+    bufp->chgIData(oldp+22,(vlSelfRef.bnn_core__DOT__wt_bram_dout),32);
+    bufp->chgBit(oldp+23,(vlSelfRef.bnn_core__DOT__busy));
+    bufp->chgBit(oldp+24,(vlSelfRef.bnn_core__DOT__done));
+    bufp->chgIData(oldp+25,(vlSelfRef.bnn_core__DOT__result),32);
+    bufp->chgIData(oldp+26,(vlSelfRef.bnn_core__DOT__in_ptr_reg),32);
+    bufp->chgIData(oldp+27,(vlSelfRef.bnn_core__DOT__wt_ptr_reg),32);
+    bufp->chgIData(oldp+28,(vlSelfRef.bnn_core__DOT__thr_ptr_reg),32);
+    bufp->chgSData(oldp+29,(vlSelfRef.bnn_core__DOT__input_words),16);
+    bufp->chgSData(oldp+30,(vlSelfRef.bnn_core__DOT__output_neurons),16);
+    bufp->chgCData(oldp+31,(vlSelfRef.bnn_core__DOT__layer_idx),3);
+    bufp->chgCData(oldp+32,(vlSelfRef.bnn_core__DOT__neuron_idx),3);
+    bufp->chgCData(oldp+33,(vlSelfRef.bnn_core__DOT__pe_idx),3);
+    bufp->chgCData(oldp+34,(vlSelfRef.bnn_core__DOT__word_idx),3);
+    bufp->chgCData(oldp+35,(vlSelfRef.bnn_core__DOT__activ_word_idx),3);
+    bufp->chgCData(oldp+36,(vlSelfRef.bnn_core__DOT__wt_word_idx),3);
+    bufp->chgCData(oldp+37,(vlSelfRef.bnn_core__DOT__input_word_last),3);
+    bufp->chgCData(oldp+38,(vlSelfRef.bnn_core__DOT__output_neuron_last),3);
+    bufp->chgBit(oldp+39,(vlSelfRef.bnn_core__DOT__bram_primed));
+    bufp->chgCData(oldp+40,(vlSelfRef.bnn_core__DOT__state),4);
+    bufp->chgIData(oldp+41,(vlSelfRef.bnn_core__DOT__current_desc[3U]),32);
+    bufp->chgIData(oldp+42,(vlSelfRef.bnn_core__DOT__current_desc[2U]),32);
+    bufp->chgIData(oldp+43,(vlSelfRef.bnn_core__DOT__current_desc[1U]),32);
+    bufp->chgSData(oldp+44,((vlSelfRef.bnn_core__DOT__current_desc[0U] 
+                             >> 0x00000010U)),16);
+    bufp->chgSData(oldp+45,((0x0000ffffU & vlSelfRef.bnn_core__DOT__current_desc[0U])),16);
+    bufp->chgIData(oldp+46,(vlSelfRef.bnn_core__DOT__layer_table
+                            [0U][3U]),32);
+    bufp->chgIData(oldp+47,(vlSelfRef.bnn_core__DOT__layer_table
+                            [0U][2U]),32);
+    bufp->chgIData(oldp+48,(vlSelfRef.bnn_core__DOT__layer_table
+                            [0U][1U]),32);
+    bufp->chgSData(oldp+49,((vlSelfRef.bnn_core__DOT__layer_table
+                             [0U][0U] >> 0x00000010U)),16);
+    bufp->chgSData(oldp+50,((0x0000ffffU & vlSelfRef.bnn_core__DOT__layer_table
+                             [0U][0U])),16);
+    bufp->chgIData(oldp+51,(vlSelfRef.bnn_core__DOT__layer_table
+                            [1U][3U]),32);
+    bufp->chgIData(oldp+52,(vlSelfRef.bnn_core__DOT__layer_table
+                            [1U][2U]),32);
+    bufp->chgIData(oldp+53,(vlSelfRef.bnn_core__DOT__layer_table
+                            [1U][1U]),32);
+    bufp->chgSData(oldp+54,((vlSelfRef.bnn_core__DOT__layer_table
+                             [1U][0U] >> 0x00000010U)),16);
+    bufp->chgSData(oldp+55,((0x0000ffffU & vlSelfRef.bnn_core__DOT__layer_table
+                             [1U][0U])),16);
+    bufp->chgIData(oldp+56,(vlSelfRef.bnn_core__DOT__layer_table
+                            [2U][3U]),32);
+    bufp->chgIData(oldp+57,(vlSelfRef.bnn_core__DOT__layer_table
+                            [2U][2U]),32);
+    bufp->chgIData(oldp+58,(vlSelfRef.bnn_core__DOT__layer_table
+                            [2U][1U]),32);
+    bufp->chgSData(oldp+59,((vlSelfRef.bnn_core__DOT__layer_table
+                             [2U][0U] >> 0x00000010U)),16);
+    bufp->chgSData(oldp+60,((0x0000ffffU & vlSelfRef.bnn_core__DOT__layer_table
+                             [2U][0U])),16);
+    bufp->chgIData(oldp+61,(vlSelfRef.bnn_core__DOT__layer_table
+                            [3U][3U]),32);
+    bufp->chgIData(oldp+62,(vlSelfRef.bnn_core__DOT__layer_table
+                            [3U][2U]),32);
+    bufp->chgIData(oldp+63,(vlSelfRef.bnn_core__DOT__layer_table
+                            [3U][1U]),32);
+    bufp->chgSData(oldp+64,((vlSelfRef.bnn_core__DOT__layer_table
+                             [3U][0U] >> 0x00000010U)),16);
+    bufp->chgSData(oldp+65,((0x0000ffffU & vlSelfRef.bnn_core__DOT__layer_table
+                             [3U][0U])),16);
+    bufp->chgIData(oldp+66,(vlSelfRef.bnn_core__DOT__layer_table
+                            [4U][3U]),32);
+    bufp->chgIData(oldp+67,(vlSelfRef.bnn_core__DOT__layer_table
+                            [4U][2U]),32);
+    bufp->chgIData(oldp+68,(vlSelfRef.bnn_core__DOT__layer_table
+                            [4U][1U]),32);
+    bufp->chgSData(oldp+69,((vlSelfRef.bnn_core__DOT__layer_table
+                             [4U][0U] >> 0x00000010U)),16);
+    bufp->chgSData(oldp+70,((0x0000ffffU & vlSelfRef.bnn_core__DOT__layer_table
+                             [4U][0U])),16);
+    bufp->chgIData(oldp+71,(vlSelfRef.bnn_core__DOT__layer_table
+                            [5U][3U]),32);
+    bufp->chgIData(oldp+72,(vlSelfRef.bnn_core__DOT__layer_table
+                            [5U][2U]),32);
+    bufp->chgIData(oldp+73,(vlSelfRef.bnn_core__DOT__layer_table
+                            [5U][1U]),32);
+    bufp->chgSData(oldp+74,((vlSelfRef.bnn_core__DOT__layer_table
+                             [5U][0U] >> 0x00000010U)),16);
+    bufp->chgSData(oldp+75,((0x0000ffffU & vlSelfRef.bnn_core__DOT__layer_table
+                             [5U][0U])),16);
+    bufp->chgIData(oldp+76,(vlSelfRef.bnn_core__DOT__layer_table
+                            [6U][3U]),32);
+    bufp->chgIData(oldp+77,(vlSelfRef.bnn_core__DOT__layer_table
+                            [6U][2U]),32);
+    bufp->chgIData(oldp+78,(vlSelfRef.bnn_core__DOT__layer_table
+                            [6U][1U]),32);
+    bufp->chgSData(oldp+79,((vlSelfRef.bnn_core__DOT__layer_table
+                             [6U][0U] >> 0x00000010U)),16);
+    bufp->chgSData(oldp+80,((0x0000ffffU & vlSelfRef.bnn_core__DOT__layer_table
+                             [6U][0U])),16);
+    bufp->chgIData(oldp+81,(vlSelfRef.bnn_core__DOT__layer_table
+                            [7U][3U]),32);
+    bufp->chgIData(oldp+82,(vlSelfRef.bnn_core__DOT__layer_table
+                            [7U][2U]),32);
+    bufp->chgIData(oldp+83,(vlSelfRef.bnn_core__DOT__layer_table
+                            [7U][1U]),32);
+    bufp->chgSData(oldp+84,((vlSelfRef.bnn_core__DOT__layer_table
+                             [7U][0U] >> 0x00000010U)),16);
+    bufp->chgSData(oldp+85,((0x0000ffffU & vlSelfRef.bnn_core__DOT__layer_table
+                             [7U][0U])),16);
+    bufp->chgBit(oldp+86,(vlSelfRef.bnn_core__DOT__enable));
+    bufp->chgBit(oldp+87,(vlSelfRef.bnn_core__DOT__clear_accumulator));
+    bufp->chgSData(oldp+88,(vlSelfRef.bnn_core__DOT__pe_result[0]),10);
+    bufp->chgSData(oldp+89,(vlSelfRef.bnn_core__DOT__pe_result[1]),10);
+    bufp->chgSData(oldp+90,(vlSelfRef.bnn_core__DOT__pe_result[2]),10);
+    bufp->chgSData(oldp+91,(vlSelfRef.bnn_core__DOT__pe_result[3]),10);
+    bufp->chgSData(oldp+92,(vlSelfRef.bnn_core__DOT__pe_result[4]),10);
+    bufp->chgSData(oldp+93,(vlSelfRef.bnn_core__DOT__pe_result[5]),10);
+    bufp->chgSData(oldp+94,(vlSelfRef.bnn_core__DOT__pe_result[6]),10);
+    bufp->chgSData(oldp+95,(vlSelfRef.bnn_core__DOT__pe_result[7]),10);
+    bufp->chgIData(oldp+96,(vlSelfRef.bnn_core__DOT__output_buffer[0]),32);
+    bufp->chgIData(oldp+97,(vlSelfRef.bnn_core__DOT__output_buffer[1]),32);
+    bufp->chgIData(oldp+98,(vlSelfRef.bnn_core__DOT__output_buffer[2]),32);
+    bufp->chgIData(oldp+99,(vlSelfRef.bnn_core__DOT__output_buffer[3]),32);
+    bufp->chgIData(oldp+100,(vlSelfRef.bnn_core__DOT__output_buffer[4]),32);
+    bufp->chgIData(oldp+101,(vlSelfRef.bnn_core__DOT__output_buffer[5]),32);
+    bufp->chgIData(oldp+102,(vlSelfRef.bnn_core__DOT__output_buffer[6]),32);
+    bufp->chgIData(oldp+103,(vlSelfRef.bnn_core__DOT__output_buffer[7]),32);
+    bufp->chgIData(oldp+104,(vlSelfRef.bnn_core__DOT__activation_buffer[0]),32);
+    bufp->chgIData(oldp+105,(vlSelfRef.bnn_core__DOT__activation_buffer[1]),32);
+    bufp->chgIData(oldp+106,(vlSelfRef.bnn_core__DOT__activation_buffer[2]),32);
+    bufp->chgIData(oldp+107,(vlSelfRef.bnn_core__DOT__activation_buffer[3]),32);
+    bufp->chgIData(oldp+108,(vlSelfRef.bnn_core__DOT__activation_buffer[4]),32);
+    bufp->chgIData(oldp+109,(vlSelfRef.bnn_core__DOT__activation_buffer[5]),32);
+    bufp->chgIData(oldp+110,(vlSelfRef.bnn_core__DOT__activation_buffer[6]),32);
+    bufp->chgIData(oldp+111,(vlSelfRef.bnn_core__DOT__activation_buffer[7]),32);
+    bufp->chgSData(oldp+112,(vlSelfRef.bnn_core__DOT__threshold_buffer[0]),10);
+    bufp->chgSData(oldp+113,(vlSelfRef.bnn_core__DOT__threshold_buffer[1]),10);
+    bufp->chgSData(oldp+114,(vlSelfRef.bnn_core__DOT__threshold_buffer[2]),10);
+    bufp->chgSData(oldp+115,(vlSelfRef.bnn_core__DOT__threshold_buffer[3]),10);
+    bufp->chgSData(oldp+116,(vlSelfRef.bnn_core__DOT__threshold_buffer[4]),10);
+    bufp->chgSData(oldp+117,(vlSelfRef.bnn_core__DOT__threshold_buffer[5]),10);
+    bufp->chgSData(oldp+118,(vlSelfRef.bnn_core__DOT__threshold_buffer[6]),10);
+    bufp->chgSData(oldp+119,(vlSelfRef.bnn_core__DOT__threshold_buffer[7]),10);
+    bufp->chgBit(oldp+120,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__clk));
+    bufp->chgBit(oldp+121,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__rstn));
+    bufp->chgIData(oldp+122,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__activations_buffer),32);
+    bufp->chgIData(oldp+123,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__weight_buffer),32);
+    bufp->chgSData(oldp+124,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__threshold),10);
+    bufp->chgSData(oldp+125,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__neuron_value),10);
+    bufp->chgBit(oldp+126,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__enable));
+    bufp->chgBit(oldp+127,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__clear_accumulator));
+    bufp->chgIData(oldp+128,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__xnor_result),32);
+    bufp->chgCData(oldp+129,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[0]),2);
+    bufp->chgCData(oldp+130,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[1]),2);
+    bufp->chgCData(oldp+131,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[2]),2);
+    bufp->chgCData(oldp+132,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[3]),2);
+    bufp->chgCData(oldp+133,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[4]),2);
+    bufp->chgCData(oldp+134,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[5]),2);
+    bufp->chgCData(oldp+135,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[6]),2);
+    bufp->chgCData(oldp+136,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[7]),2);
+    bufp->chgCData(oldp+137,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[8]),2);
+    bufp->chgCData(oldp+138,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[9]),2);
+    bufp->chgCData(oldp+139,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[10]),2);
+    bufp->chgCData(oldp+140,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[11]),2);
+    bufp->chgCData(oldp+141,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[12]),2);
+    bufp->chgCData(oldp+142,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[13]),2);
+    bufp->chgCData(oldp+143,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[14]),2);
+    bufp->chgCData(oldp+144,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage1[15]),2);
+    bufp->chgCData(oldp+145,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage2[0]),3);
+    bufp->chgCData(oldp+146,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage2[1]),3);
+    bufp->chgCData(oldp+147,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage2[2]),3);
+    bufp->chgCData(oldp+148,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage2[3]),3);
+    bufp->chgCData(oldp+149,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage2[4]),3);
+    bufp->chgCData(oldp+150,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage2[5]),3);
+    bufp->chgCData(oldp+151,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage2[6]),3);
+    bufp->chgCData(oldp+152,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage2[7]),3);
+    bufp->chgCData(oldp+153,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage3[0]),4);
+    bufp->chgCData(oldp+154,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage3[1]),4);
+    bufp->chgCData(oldp+155,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage3[2]),4);
+    bufp->chgCData(oldp+156,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage3[3]),4);
+    bufp->chgCData(oldp+157,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage4[0]),5);
+    bufp->chgCData(oldp+158,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__stage4[1]),5);
+    bufp->chgIData(oldp+159,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__i),32);
+    bufp->chgCData(oldp+160,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__sum_reg),6);
+    bufp->chgIData(oldp+161,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__inp),32);
+    bufp->chgIData(oldp+162,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__wt),32);
+    bufp->chgSData(oldp+163,(vlSelfRef.bnn_core__DOT__pe_array__BRA__0__KET____DOT__pe__DOT__accumulator),10);
+    bufp->chgBit(oldp+164,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__clk));
+    bufp->chgBit(oldp+165,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__rstn));
+    bufp->chgIData(oldp+166,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__activations_buffer),32);
+    bufp->chgIData(oldp+167,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__weight_buffer),32);
+    bufp->chgSData(oldp+168,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__threshold),10);
+    bufp->chgSData(oldp+169,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__neuron_value),10);
+    bufp->chgBit(oldp+170,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__enable));
+    bufp->chgBit(oldp+171,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__clear_accumulator));
+    bufp->chgIData(oldp+172,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__xnor_result),32);
+    bufp->chgCData(oldp+173,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[0]),2);
+    bufp->chgCData(oldp+174,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[1]),2);
+    bufp->chgCData(oldp+175,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[2]),2);
+    bufp->chgCData(oldp+176,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[3]),2);
+    bufp->chgCData(oldp+177,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[4]),2);
+    bufp->chgCData(oldp+178,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[5]),2);
+    bufp->chgCData(oldp+179,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[6]),2);
+    bufp->chgCData(oldp+180,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[7]),2);
+    bufp->chgCData(oldp+181,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[8]),2);
+    bufp->chgCData(oldp+182,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[9]),2);
+    bufp->chgCData(oldp+183,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[10]),2);
+    bufp->chgCData(oldp+184,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[11]),2);
+    bufp->chgCData(oldp+185,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[12]),2);
+    bufp->chgCData(oldp+186,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[13]),2);
+    bufp->chgCData(oldp+187,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[14]),2);
+    bufp->chgCData(oldp+188,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage1[15]),2);
+    bufp->chgCData(oldp+189,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage2[0]),3);
+    bufp->chgCData(oldp+190,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage2[1]),3);
+    bufp->chgCData(oldp+191,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage2[2]),3);
+    bufp->chgCData(oldp+192,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage2[3]),3);
+    bufp->chgCData(oldp+193,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage2[4]),3);
+    bufp->chgCData(oldp+194,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage2[5]),3);
+    bufp->chgCData(oldp+195,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage2[6]),3);
+    bufp->chgCData(oldp+196,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage2[7]),3);
+    bufp->chgCData(oldp+197,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage3[0]),4);
+    bufp->chgCData(oldp+198,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage3[1]),4);
+    bufp->chgCData(oldp+199,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage3[2]),4);
+    bufp->chgCData(oldp+200,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage3[3]),4);
+    bufp->chgCData(oldp+201,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage4[0]),5);
+    bufp->chgCData(oldp+202,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__stage4[1]),5);
+    bufp->chgIData(oldp+203,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__i),32);
+    bufp->chgCData(oldp+204,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__sum_reg),6);
+    bufp->chgIData(oldp+205,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__inp),32);
+    bufp->chgIData(oldp+206,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__wt),32);
+    bufp->chgSData(oldp+207,(vlSelfRef.bnn_core__DOT__pe_array__BRA__1__KET____DOT__pe__DOT__accumulator),10);
+    bufp->chgBit(oldp+208,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__clk));
+    bufp->chgBit(oldp+209,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__rstn));
+    bufp->chgIData(oldp+210,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__activations_buffer),32);
+    bufp->chgIData(oldp+211,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__weight_buffer),32);
+    bufp->chgSData(oldp+212,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__threshold),10);
+    bufp->chgSData(oldp+213,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__neuron_value),10);
+    bufp->chgBit(oldp+214,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__enable));
+    bufp->chgBit(oldp+215,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__clear_accumulator));
+    bufp->chgIData(oldp+216,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__xnor_result),32);
+    bufp->chgCData(oldp+217,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[0]),2);
+    bufp->chgCData(oldp+218,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[1]),2);
+    bufp->chgCData(oldp+219,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[2]),2);
+    bufp->chgCData(oldp+220,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[3]),2);
+    bufp->chgCData(oldp+221,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[4]),2);
+    bufp->chgCData(oldp+222,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[5]),2);
+    bufp->chgCData(oldp+223,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[6]),2);
+    bufp->chgCData(oldp+224,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[7]),2);
+    bufp->chgCData(oldp+225,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[8]),2);
+    bufp->chgCData(oldp+226,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[9]),2);
+    bufp->chgCData(oldp+227,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[10]),2);
+    bufp->chgCData(oldp+228,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[11]),2);
+    bufp->chgCData(oldp+229,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[12]),2);
+    bufp->chgCData(oldp+230,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[13]),2);
+    bufp->chgCData(oldp+231,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[14]),2);
+    bufp->chgCData(oldp+232,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage1[15]),2);
+    bufp->chgCData(oldp+233,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage2[0]),3);
+    bufp->chgCData(oldp+234,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage2[1]),3);
+    bufp->chgCData(oldp+235,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage2[2]),3);
+    bufp->chgCData(oldp+236,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage2[3]),3);
+    bufp->chgCData(oldp+237,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage2[4]),3);
+    bufp->chgCData(oldp+238,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage2[5]),3);
+    bufp->chgCData(oldp+239,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage2[6]),3);
+    bufp->chgCData(oldp+240,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage2[7]),3);
+    bufp->chgCData(oldp+241,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage3[0]),4);
+    bufp->chgCData(oldp+242,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage3[1]),4);
+    bufp->chgCData(oldp+243,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage3[2]),4);
+    bufp->chgCData(oldp+244,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage3[3]),4);
+    bufp->chgCData(oldp+245,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage4[0]),5);
+    bufp->chgCData(oldp+246,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__stage4[1]),5);
+    bufp->chgIData(oldp+247,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__i),32);
+    bufp->chgCData(oldp+248,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__sum_reg),6);
+    bufp->chgIData(oldp+249,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__inp),32);
+    bufp->chgIData(oldp+250,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__wt),32);
+    bufp->chgSData(oldp+251,(vlSelfRef.bnn_core__DOT__pe_array__BRA__2__KET____DOT__pe__DOT__accumulator),10);
+    bufp->chgBit(oldp+252,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__clk));
+    bufp->chgBit(oldp+253,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__rstn));
+    bufp->chgIData(oldp+254,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__activations_buffer),32);
+    bufp->chgIData(oldp+255,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__weight_buffer),32);
+    bufp->chgSData(oldp+256,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__threshold),10);
+    bufp->chgSData(oldp+257,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__neuron_value),10);
+    bufp->chgBit(oldp+258,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__enable));
+    bufp->chgBit(oldp+259,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__clear_accumulator));
+    bufp->chgIData(oldp+260,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__xnor_result),32);
+    bufp->chgCData(oldp+261,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[0]),2);
+    bufp->chgCData(oldp+262,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[1]),2);
+    bufp->chgCData(oldp+263,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[2]),2);
+    bufp->chgCData(oldp+264,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[3]),2);
+    bufp->chgCData(oldp+265,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[4]),2);
+    bufp->chgCData(oldp+266,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[5]),2);
+    bufp->chgCData(oldp+267,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[6]),2);
+    bufp->chgCData(oldp+268,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[7]),2);
+    bufp->chgCData(oldp+269,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[8]),2);
+    bufp->chgCData(oldp+270,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[9]),2);
+    bufp->chgCData(oldp+271,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[10]),2);
+    bufp->chgCData(oldp+272,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[11]),2);
+    bufp->chgCData(oldp+273,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[12]),2);
+    bufp->chgCData(oldp+274,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[13]),2);
+    bufp->chgCData(oldp+275,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[14]),2);
+    bufp->chgCData(oldp+276,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage1[15]),2);
+    bufp->chgCData(oldp+277,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage2[0]),3);
+    bufp->chgCData(oldp+278,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage2[1]),3);
+    bufp->chgCData(oldp+279,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage2[2]),3);
+    bufp->chgCData(oldp+280,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage2[3]),3);
+    bufp->chgCData(oldp+281,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage2[4]),3);
+    bufp->chgCData(oldp+282,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage2[5]),3);
+    bufp->chgCData(oldp+283,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage2[6]),3);
+    bufp->chgCData(oldp+284,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage2[7]),3);
+    bufp->chgCData(oldp+285,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage3[0]),4);
+    bufp->chgCData(oldp+286,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage3[1]),4);
+    bufp->chgCData(oldp+287,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage3[2]),4);
+    bufp->chgCData(oldp+288,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage3[3]),4);
+    bufp->chgCData(oldp+289,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage4[0]),5);
+    bufp->chgCData(oldp+290,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__stage4[1]),5);
+    bufp->chgIData(oldp+291,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__i),32);
+    bufp->chgCData(oldp+292,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__sum_reg),6);
+    bufp->chgIData(oldp+293,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__inp),32);
+    bufp->chgIData(oldp+294,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__wt),32);
+    bufp->chgSData(oldp+295,(vlSelfRef.bnn_core__DOT__pe_array__BRA__3__KET____DOT__pe__DOT__accumulator),10);
+    bufp->chgBit(oldp+296,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__clk));
+    bufp->chgBit(oldp+297,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__rstn));
+    bufp->chgIData(oldp+298,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__activations_buffer),32);
+    bufp->chgIData(oldp+299,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__weight_buffer),32);
+    bufp->chgSData(oldp+300,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__threshold),10);
+    bufp->chgSData(oldp+301,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__neuron_value),10);
+    bufp->chgBit(oldp+302,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__enable));
+    bufp->chgBit(oldp+303,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__clear_accumulator));
+    bufp->chgIData(oldp+304,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__xnor_result),32);
+    bufp->chgCData(oldp+305,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[0]),2);
+    bufp->chgCData(oldp+306,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[1]),2);
+    bufp->chgCData(oldp+307,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[2]),2);
+    bufp->chgCData(oldp+308,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[3]),2);
+    bufp->chgCData(oldp+309,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[4]),2);
+    bufp->chgCData(oldp+310,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[5]),2);
+    bufp->chgCData(oldp+311,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[6]),2);
+    bufp->chgCData(oldp+312,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[7]),2);
+    bufp->chgCData(oldp+313,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[8]),2);
+    bufp->chgCData(oldp+314,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[9]),2);
+    bufp->chgCData(oldp+315,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[10]),2);
+    bufp->chgCData(oldp+316,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[11]),2);
+    bufp->chgCData(oldp+317,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[12]),2);
+    bufp->chgCData(oldp+318,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[13]),2);
+    bufp->chgCData(oldp+319,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[14]),2);
+    bufp->chgCData(oldp+320,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage1[15]),2);
+    bufp->chgCData(oldp+321,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage2[0]),3);
+    bufp->chgCData(oldp+322,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage2[1]),3);
+    bufp->chgCData(oldp+323,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage2[2]),3);
+    bufp->chgCData(oldp+324,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage2[3]),3);
+    bufp->chgCData(oldp+325,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage2[4]),3);
+    bufp->chgCData(oldp+326,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage2[5]),3);
+    bufp->chgCData(oldp+327,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage2[6]),3);
+    bufp->chgCData(oldp+328,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage2[7]),3);
+    bufp->chgCData(oldp+329,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage3[0]),4);
+    bufp->chgCData(oldp+330,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage3[1]),4);
+    bufp->chgCData(oldp+331,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage3[2]),4);
+    bufp->chgCData(oldp+332,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage3[3]),4);
+    bufp->chgCData(oldp+333,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage4[0]),5);
+    bufp->chgCData(oldp+334,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__stage4[1]),5);
+    bufp->chgIData(oldp+335,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__i),32);
+    bufp->chgCData(oldp+336,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__sum_reg),6);
+    bufp->chgIData(oldp+337,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__inp),32);
+    bufp->chgIData(oldp+338,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__wt),32);
+    bufp->chgSData(oldp+339,(vlSelfRef.bnn_core__DOT__pe_array__BRA__4__KET____DOT__pe__DOT__accumulator),10);
+    bufp->chgBit(oldp+340,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__clk));
+    bufp->chgBit(oldp+341,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__rstn));
+    bufp->chgIData(oldp+342,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__activations_buffer),32);
+    bufp->chgIData(oldp+343,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__weight_buffer),32);
+    bufp->chgSData(oldp+344,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__threshold),10);
+    bufp->chgSData(oldp+345,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__neuron_value),10);
+    bufp->chgBit(oldp+346,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__enable));
+    bufp->chgBit(oldp+347,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__clear_accumulator));
+    bufp->chgIData(oldp+348,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__xnor_result),32);
+    bufp->chgCData(oldp+349,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[0]),2);
+    bufp->chgCData(oldp+350,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[1]),2);
+    bufp->chgCData(oldp+351,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[2]),2);
+    bufp->chgCData(oldp+352,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[3]),2);
+    bufp->chgCData(oldp+353,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[4]),2);
+    bufp->chgCData(oldp+354,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[5]),2);
+    bufp->chgCData(oldp+355,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[6]),2);
+    bufp->chgCData(oldp+356,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[7]),2);
+    bufp->chgCData(oldp+357,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[8]),2);
+    bufp->chgCData(oldp+358,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[9]),2);
+    bufp->chgCData(oldp+359,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[10]),2);
+    bufp->chgCData(oldp+360,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[11]),2);
+    bufp->chgCData(oldp+361,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[12]),2);
+    bufp->chgCData(oldp+362,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[13]),2);
+    bufp->chgCData(oldp+363,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[14]),2);
+    bufp->chgCData(oldp+364,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage1[15]),2);
+    bufp->chgCData(oldp+365,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage2[0]),3);
+    bufp->chgCData(oldp+366,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage2[1]),3);
+    bufp->chgCData(oldp+367,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage2[2]),3);
+    bufp->chgCData(oldp+368,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage2[3]),3);
+    bufp->chgCData(oldp+369,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage2[4]),3);
+    bufp->chgCData(oldp+370,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage2[5]),3);
+    bufp->chgCData(oldp+371,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage2[6]),3);
+    bufp->chgCData(oldp+372,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage2[7]),3);
+    bufp->chgCData(oldp+373,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage3[0]),4);
+    bufp->chgCData(oldp+374,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage3[1]),4);
+    bufp->chgCData(oldp+375,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage3[2]),4);
+    bufp->chgCData(oldp+376,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage3[3]),4);
+    bufp->chgCData(oldp+377,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage4[0]),5);
+    bufp->chgCData(oldp+378,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__stage4[1]),5);
+    bufp->chgIData(oldp+379,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__i),32);
+    bufp->chgCData(oldp+380,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__sum_reg),6);
+    bufp->chgIData(oldp+381,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__inp),32);
+    bufp->chgIData(oldp+382,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__wt),32);
+    bufp->chgSData(oldp+383,(vlSelfRef.bnn_core__DOT__pe_array__BRA__5__KET____DOT__pe__DOT__accumulator),10);
+    bufp->chgBit(oldp+384,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__clk));
+    bufp->chgBit(oldp+385,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__rstn));
+    bufp->chgIData(oldp+386,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__activations_buffer),32);
+    bufp->chgIData(oldp+387,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__weight_buffer),32);
+    bufp->chgSData(oldp+388,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__threshold),10);
+    bufp->chgSData(oldp+389,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__neuron_value),10);
+    bufp->chgBit(oldp+390,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__enable));
+    bufp->chgBit(oldp+391,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__clear_accumulator));
+    bufp->chgIData(oldp+392,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__xnor_result),32);
+    bufp->chgCData(oldp+393,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[0]),2);
+    bufp->chgCData(oldp+394,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[1]),2);
+    bufp->chgCData(oldp+395,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[2]),2);
+    bufp->chgCData(oldp+396,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[3]),2);
+    bufp->chgCData(oldp+397,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[4]),2);
+    bufp->chgCData(oldp+398,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[5]),2);
+    bufp->chgCData(oldp+399,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[6]),2);
+    bufp->chgCData(oldp+400,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[7]),2);
+    bufp->chgCData(oldp+401,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[8]),2);
+    bufp->chgCData(oldp+402,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[9]),2);
+    bufp->chgCData(oldp+403,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[10]),2);
+    bufp->chgCData(oldp+404,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[11]),2);
+    bufp->chgCData(oldp+405,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[12]),2);
+    bufp->chgCData(oldp+406,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[13]),2);
+    bufp->chgCData(oldp+407,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[14]),2);
+    bufp->chgCData(oldp+408,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage1[15]),2);
+    bufp->chgCData(oldp+409,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage2[0]),3);
+    bufp->chgCData(oldp+410,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage2[1]),3);
+    bufp->chgCData(oldp+411,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage2[2]),3);
+    bufp->chgCData(oldp+412,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage2[3]),3);
+    bufp->chgCData(oldp+413,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage2[4]),3);
+    bufp->chgCData(oldp+414,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage2[5]),3);
+    bufp->chgCData(oldp+415,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage2[6]),3);
+    bufp->chgCData(oldp+416,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage2[7]),3);
+    bufp->chgCData(oldp+417,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage3[0]),4);
+    bufp->chgCData(oldp+418,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage3[1]),4);
+    bufp->chgCData(oldp+419,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage3[2]),4);
+    bufp->chgCData(oldp+420,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage3[3]),4);
+    bufp->chgCData(oldp+421,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage4[0]),5);
+    bufp->chgCData(oldp+422,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__stage4[1]),5);
+    bufp->chgIData(oldp+423,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__i),32);
+    bufp->chgCData(oldp+424,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__sum_reg),6);
+    bufp->chgIData(oldp+425,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__inp),32);
+    bufp->chgIData(oldp+426,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__wt),32);
+    bufp->chgSData(oldp+427,(vlSelfRef.bnn_core__DOT__pe_array__BRA__6__KET____DOT__pe__DOT__accumulator),10);
+    bufp->chgBit(oldp+428,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__clk));
+    bufp->chgBit(oldp+429,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__rstn));
+    bufp->chgIData(oldp+430,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__activations_buffer),32);
+    bufp->chgIData(oldp+431,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__weight_buffer),32);
+    bufp->chgSData(oldp+432,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__threshold),10);
+    bufp->chgSData(oldp+433,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__neuron_value),10);
+    bufp->chgBit(oldp+434,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__enable));
+    bufp->chgBit(oldp+435,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__clear_accumulator));
+    bufp->chgIData(oldp+436,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__xnor_result),32);
+    bufp->chgCData(oldp+437,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[0]),2);
+    bufp->chgCData(oldp+438,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[1]),2);
+    bufp->chgCData(oldp+439,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[2]),2);
+    bufp->chgCData(oldp+440,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[3]),2);
+    bufp->chgCData(oldp+441,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[4]),2);
+    bufp->chgCData(oldp+442,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[5]),2);
+    bufp->chgCData(oldp+443,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[6]),2);
+    bufp->chgCData(oldp+444,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[7]),2);
+    bufp->chgCData(oldp+445,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[8]),2);
+    bufp->chgCData(oldp+446,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[9]),2);
+    bufp->chgCData(oldp+447,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[10]),2);
+    bufp->chgCData(oldp+448,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[11]),2);
+    bufp->chgCData(oldp+449,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[12]),2);
+    bufp->chgCData(oldp+450,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[13]),2);
+    bufp->chgCData(oldp+451,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[14]),2);
+    bufp->chgCData(oldp+452,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage1[15]),2);
+    bufp->chgCData(oldp+453,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage2[0]),3);
+    bufp->chgCData(oldp+454,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage2[1]),3);
+    bufp->chgCData(oldp+455,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage2[2]),3);
+    bufp->chgCData(oldp+456,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage2[3]),3);
+    bufp->chgCData(oldp+457,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage2[4]),3);
+    bufp->chgCData(oldp+458,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage2[5]),3);
+    bufp->chgCData(oldp+459,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage2[6]),3);
+    bufp->chgCData(oldp+460,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage2[7]),3);
+    bufp->chgCData(oldp+461,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage3[0]),4);
+    bufp->chgCData(oldp+462,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage3[1]),4);
+    bufp->chgCData(oldp+463,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage3[2]),4);
+    bufp->chgCData(oldp+464,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage3[3]),4);
+    bufp->chgCData(oldp+465,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage4[0]),5);
+    bufp->chgCData(oldp+466,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__stage4[1]),5);
+    bufp->chgIData(oldp+467,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__i),32);
+    bufp->chgCData(oldp+468,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__sum_reg),6);
+    bufp->chgIData(oldp+469,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__inp),32);
+    bufp->chgIData(oldp+470,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__wt),32);
+    bufp->chgSData(oldp+471,(vlSelfRef.bnn_core__DOT__pe_array__BRA__7__KET____DOT__pe__DOT__accumulator),10);
+    bufp->chgIData(oldp+472,(vlSelfRef.bnn_core__DOT__unnamedblk1__DOT__n),32);
+    bufp->chgIData(oldp+473,(vlSelfRef.bnn_core__DOT__unnamedblk2__DOT__n),32);
+}
+
+void Vtop___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root__trace_cleanup\n"); );
+    // Locals
+    VlUnpacked<CData/*0:0*/, 1> __Vm_traceActivity;
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        __Vm_traceActivity[__Vi0] = 0;
+    }
+    // Body
+    Vtop___024root* const __restrict vlSelf VL_ATTR_UNUSED = static_cast<Vtop___024root*>(voidSelf);
+    Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    vlSymsp->__Vm_activity = false;
+    __Vm_traceActivity[0U] = 0U;
+}

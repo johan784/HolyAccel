@@ -1,0 +1,105 @@
+// Verilated -*- C++ -*-
+// DESCRIPTION: Verilator output: Symbol table implementation internals
+
+#include "Vtop__pch.h"
+
+Vtop__Syms::Vtop__Syms(VerilatedContext* contextp, const char* namep, Vtop* modelp)
+    : VerilatedSyms{contextp}
+    // Setup internal state of the Syms class
+    , __Vm_modelp{modelp}
+    // Setup top module instance
+    , TOP{this, namep}
+{
+    // Check resources
+    Verilated::stackCheck(264);
+    // Setup sub module instances
+    TOP__constants_pkg.ctor(this, "constants_pkg");
+    // Configure time unit / time precision
+    _vm_contextp__->timeunit(-9);
+    _vm_contextp__->timeprecision(-12);
+    // Setup each module's pointers to their submodules
+    TOP.__PVT__constants_pkg = &TOP__constants_pkg;
+    // Setup each module's pointer back to symbol table (for public functions)
+    TOP.__Vconfigure(true);
+    TOP__constants_pkg.__Vconfigure(true);
+    // Setup scopes
+    __Vscopep_TOP = new VerilatedScope{this, "TOP", "TOP", "<null>", 0, VerilatedScope::SCOPE_OTHER};
+    __Vscopep_bnn_core = new VerilatedScope{this, "bnn_core", "bnn_core", "bnn_core", -9, VerilatedScope::SCOPE_MODULE};
+    __Vscopep_bnn_core__pe = new VerilatedScope{this, "bnn_core.pe", "pe", "processing_element", -9, VerilatedScope::SCOPE_MODULE};
+    __Vscopep_constants_pkg = new VerilatedScope{this, "constants_pkg", "constants_pkg", "constants_pkg", -9, VerilatedScope::SCOPE_PACKAGE};
+    // Set up scope hierarchy
+    __Vhier.add(0, __Vscopep_bnn_core);
+    __Vhier.add(0, __Vscopep_constants_pkg);
+    __Vhier.add(__Vscopep_bnn_core, __Vscopep_bnn_core__pe);
+    // Setup export functions - final: 0
+    // Setup export functions - final: 1
+    // Setup public variables
+    __Vscopep_TOP->varInsert("busy", &(TOP.busy), false, VLVT_UINT8, VLVD_OUT|VLVF_PUB_RW, 0, 0);
+    __Vscopep_TOP->varInsert("clk", &(TOP.clk), false, VLVT_UINT8, VLVD_IN|VLVF_PUB_RW, 0, 0);
+    __Vscopep_TOP->varInsert("done", &(TOP.done), false, VLVT_UINT8, VLVD_OUT|VLVF_PUB_RW, 0, 0);
+    __Vscopep_TOP->varInsert("in_ptr", &(TOP.in_ptr), false, VLVT_UINT32, VLVD_IN|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_TOP->varInsert("inp_bram_addr", &(TOP.inp_bram_addr), false, VLVT_UINT32, VLVD_OUT|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_TOP->varInsert("inp_bram_dout", &(TOP.inp_bram_dout), false, VLVT_UINT32, VLVD_IN|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_TOP->varInsert("result", &(TOP.result), false, VLVT_UINT32, VLVD_OUT|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_TOP->varInsert("rstn", &(TOP.rstn), false, VLVT_UINT8, VLVD_IN|VLVF_PUB_RW, 0, 0);
+    __Vscopep_TOP->varInsert("start", &(TOP.start), false, VLVT_UINT8, VLVD_IN|VLVF_PUB_RW, 0, 0);
+    __Vscopep_TOP->varInsert("wt_bram_addr", &(TOP.wt_bram_addr), false, VLVT_UINT32, VLVD_OUT|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_TOP->varInsert("wt_bram_dout", &(TOP.wt_bram_dout), false, VLVT_UINT32, VLVD_IN|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_TOP->varInsert("wt_ptr", &(TOP.wt_ptr), false, VLVT_UINT32, VLVD_IN|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core->varInsert("busy", &(TOP.bnn_core__DOT__busy), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 0);
+    __Vscopep_bnn_core->varInsert("clear_accumulator", &(TOP.bnn_core__DOT__clear_accumulator), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 0);
+    __Vscopep_bnn_core->varInsert("clk", &(TOP.bnn_core__DOT__clk), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 0);
+    __Vscopep_bnn_core->varInsert("done", &(TOP.bnn_core__DOT__done), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 0);
+    __Vscopep_bnn_core->varInsert("enable", &(TOP.bnn_core__DOT__enable), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 0);
+    __Vscopep_bnn_core->varInsert("in_ptr", &(TOP.bnn_core__DOT__in_ptr), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core->varInsert("inp_bram_addr", &(TOP.bnn_core__DOT__inp_bram_addr), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core->varInsert("inp_bram_dout", &(TOP.bnn_core__DOT__inp_bram_dout), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core->varInsert("inputs_reg", &(TOP.bnn_core__DOT__inputs_reg), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core->varInsert("offset_count", &(TOP.bnn_core__DOT__offset_count), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core->varInsert("pe_result", &(TOP.bnn_core__DOT__pe_result), false, VLVT_UINT16, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,8,0);
+    __Vscopep_bnn_core->varInsert("result", &(TOP.bnn_core__DOT__result), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core->varInsert("rstn", &(TOP.bnn_core__DOT__rstn), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 0);
+    __Vscopep_bnn_core->varInsert("start", &(TOP.bnn_core__DOT__start), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 0);
+    __Vscopep_bnn_core->varInsert("state", &(TOP.bnn_core__DOT__state), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,2,0);
+    __Vscopep_bnn_core->varInsert("weights_reg", &(TOP.bnn_core__DOT__weights_reg), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core->varInsert("word_idx", &(TOP.bnn_core__DOT__word_idx), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,2,0);
+    __Vscopep_bnn_core->varInsert("wt_bram_addr", &(TOP.bnn_core__DOT__wt_bram_addr), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core->varInsert("wt_bram_dout", &(TOP.bnn_core__DOT__wt_bram_dout), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core->varInsert("wt_ptr", &(TOP.bnn_core__DOT__wt_ptr), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core__pe->varInsert("accumulator", &(TOP.bnn_core__DOT__pe__DOT__accumulator), false, VLVT_UINT16, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,8,0);
+    __Vscopep_bnn_core__pe->varInsert("clear_accumulator", &(TOP.bnn_core__DOT__pe__DOT__clear_accumulator), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 0);
+    __Vscopep_bnn_core__pe->varInsert("clk", &(TOP.bnn_core__DOT__pe__DOT__clk), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 0);
+    __Vscopep_bnn_core__pe->varInsert("enable", &(TOP.bnn_core__DOT__pe__DOT__enable), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 0);
+    __Vscopep_bnn_core__pe->varInsert("i", &(TOP.bnn_core__DOT__pe__DOT__i), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW|VLVF_SIGNED, 0, 1 ,31,0);
+    __Vscopep_bnn_core__pe->varInsert("inp", &(TOP.bnn_core__DOT__pe__DOT__inp), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core__pe->varInsert("input_register", &(TOP.bnn_core__DOT__pe__DOT__input_register), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core__pe->varInsert("neuron_value", &(TOP.bnn_core__DOT__pe__DOT__neuron_value), false, VLVT_UINT16, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,8,0);
+    __Vscopep_bnn_core__pe->varInsert("rstn", &(TOP.bnn_core__DOT__pe__DOT__rstn), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 0);
+    __Vscopep_bnn_core__pe->varInsert("stage1", &(TOP.bnn_core__DOT__pe__DOT__stage1), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 1, 1 ,0,15 ,1,0);
+    __Vscopep_bnn_core__pe->varInsert("stage2", &(TOP.bnn_core__DOT__pe__DOT__stage2), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 1, 1 ,0,7 ,2,0);
+    __Vscopep_bnn_core__pe->varInsert("stage3", &(TOP.bnn_core__DOT__pe__DOT__stage3), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 1, 1 ,0,3 ,3,0);
+    __Vscopep_bnn_core__pe->varInsert("stage4", &(TOP.bnn_core__DOT__pe__DOT__stage4), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 1, 1 ,0,1 ,4,0);
+    __Vscopep_bnn_core__pe->varInsert("sum_reg", &(TOP.bnn_core__DOT__pe__DOT__sum_reg), false, VLVT_UINT8, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,5,0);
+    __Vscopep_bnn_core__pe->varInsert("weight_register", &(TOP.bnn_core__DOT__pe__DOT__weight_register), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core__pe->varInsert("wt", &(TOP.bnn_core__DOT__pe__DOT__wt), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_bnn_core__pe->varInsert("xnor_result", &(TOP.bnn_core__DOT__pe__DOT__xnor_result), false, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW, 0, 1 ,31,0);
+    __Vscopep_constants_pkg->varInsert("ACCUM_WIDTH", const_cast<void*>(static_cast<const void*>(&(TOP__constants_pkg.ACCUM_WIDTH))), true, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW|VLVF_DPI_CLAY|VLVF_SIGNED, 0, 1 ,31,0);
+    __Vscopep_constants_pkg->varInsert("TOTAL_WORDS", const_cast<void*>(static_cast<const void*>(&(TOP__constants_pkg.TOTAL_WORDS))), true, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW|VLVF_DPI_CLAY|VLVF_SIGNED, 0, 1 ,31,0);
+    __Vscopep_constants_pkg->varInsert("WORD_WIDTH", const_cast<void*>(static_cast<const void*>(&(TOP__constants_pkg.WORD_WIDTH))), true, VLVT_UINT32, VLVD_NODIR|VLVF_PUB_RW|VLVF_DPI_CLAY|VLVF_SIGNED, 0, 1 ,31,0);
+}
+
+Vtop__Syms::~Vtop__Syms() {
+    // Tear down scope hierarchy
+    __Vhier.remove(0, __Vscopep_bnn_core);
+    __Vhier.remove(0, __Vscopep_constants_pkg);
+    __Vhier.remove(__Vscopep_bnn_core, __Vscopep_bnn_core__pe);
+    // Clear keys from hierarchy map after values have been removed
+    __Vhier.clear();
+    // Tear down scopes
+    VL_DO_CLEAR(delete __Vscopep_TOP, __Vscopep_TOP = nullptr);
+    VL_DO_CLEAR(delete __Vscopep_bnn_core, __Vscopep_bnn_core = nullptr);
+    VL_DO_CLEAR(delete __Vscopep_bnn_core__pe, __Vscopep_bnn_core__pe = nullptr);
+    VL_DO_CLEAR(delete __Vscopep_constants_pkg, __Vscopep_constants_pkg = nullptr);
+    // Tear down sub module instances
+    TOP__constants_pkg.dtor();
+}

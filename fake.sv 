@@ -1,0 +1,149 @@
+module crc32_axi_wrapper (
+    input  logic        aclk,
+    input  logic        aresetn,
+
+    // AXI-Lite Write Channel
+    input  logic [31:0] s_axi_awaddr,
+    input  logic        s_axi_awvalid,
+    output logic        s_axi_awready,
+    input  logic [31:0] s_axi_wdata,
+    input  logic        s_axi_wvalid,
+    output logic        s_axi_wready,
+    output logic [1:0]  s_axi_bresp,
+    output logic        s_axi_bvalid,
+    input  logic        s_axi_bready,
+
+    // AXI-Lite Read Channel
+    input  logic [31:0] s_axi_araddr,
+    input  logic        s_axi_arvalid,
+    output logic        s_axi_arready,
+    output logic [31:0] s_axi_rdata,
+    output logic [1:0]  s_axi_rresp,
+    output logic        s_axi_rvalid,
+    input  logic        s_axi_rready
+);
+
+    // ----------------------------------------------------
+    // REGISTER MAP SPEC:
+    // 0x00: ctrl_reg    (Bit [0] = start pulse)
+    // 0x04: status_reg  (Bit [0] = busy, Bit [1] = done) [Read Only]
+    // 0x08: data_in_reg (32-bit input data)
+    // 0x0C: init_val_reg(32-bit seed, reset value = 32'hFFFF_FFFF)
+    // 0x10: checksum_reg(32-bit result from core)       [Read Only]
+    // ----------------------------------------------------
+
+    // WRITE YOUR SOLUTION BELOW:
+
+
+    logic [31:0] awaddr,awvalid,awready, [31:0] wdata,wvalid,wreadt,[1:0] bresp,bvalid,bready, [31:0] araddr,arvalid,arready,[31:0] rdata, [1:0] rresp,rvalid,rready;
+
+
+    assign awaddr = s_axi_awaddr;
+    assign awvalid =        s_axi_awvalid;
+    assign awready=       s_axi_awready;
+    assign wdata = s_axi_wdata;
+    assign wvalid=      s_axi_wvalid;
+    assign wready =     s_axi_wready;
+    assign bresp =   s_axi_bresp;
+    assign bvalid =         s_axi_bvalid;
+    assign bready =         s_axi_bready;
+
+    // AXI-Lite Read Channel
+    assign araddr=  s_axi_araddr;
+    assign arvalid =         s_axi_arvalid;
+    assign arready=         s_axi_arready;
+    assign rdata=  s_axi_rdata;
+    assign rresp =  s_axi_rresp;
+    assign rvalid =         s_axi_rvalid;
+    assign rready =        s_axi_rready;
+
+    logic read_add = araddr[5:0];
+    logic write_add = awaddr[5:0];
+
+
+
+    logic [31:0] ctrl_reg;
+    logic  status_reg;
+    logic [31:0] data_in_reg;
+    logic [31:0] init_val_reg;
+    logic [31:0] checksum_reg;
+
+
+    checksum_core uut(
+        .start(core_start),
+        .stop(status_reg),
+        .data_in  data_in_reg),
+        .init_val (init_val_reg),
+        .data_out(checksum_reg)
+    );
+
+    
+
+    logic core_start;
+    assign core_start = ctrl_reg[0];
+
+    always_ff @(posedge aclk) begin 
+        if(!aresetn) begin 
+            awvalid = 1'b0;
+            awready = 1'b0;
+            wvaid = 1'b0;
+            wready - 1'b0;
+            rvalid = 1'b0;
+            rready - 1'b0;
+            rrep = 1'b0;
+            bresp = 1'b0;
+            ctrl_reg = 32'b0;
+            core_start = 1'b0;
+            init_val_reg = 32'hFFFFFFFF;
+            data_in_reg = 32'h00000000;
+        end 
+
+        //WRITE TEST 
+
+        if(awvalid && wvalid && !wready)
+
+
+            awready <= 1'b1;
+            wready <= 1'b1;
+            brep <= 1'b1;
+            bready <= 1
+
+            case(write_add) 
+                6'h00: ctrl_reg <= wdata;
+                6'h08: data_in_reg <=wdata;
+                6'h0C: init_val_reg <= wdata;
+
+                default: ;
+            endcase
+
+            if(!awvalid) begin 
+                ctr_reg[0] <= 1'b0;
+            end 
+        end 
+
+        if(arvalid && rvalid && !rready) 
+            arready <= 1'b1;
+            rready <= 1'b1;
+            rrep <= 1'b1;
+
+            case(read_add) 
+                6'h04: rdata <= status_reg;
+                6'h10: rdata<= checksum_reg;
+
+                default : ;
+            endcase 
+        end 
+    end 
+
+
+
+
+
+
+
+
+
+
+
+
+endmodule

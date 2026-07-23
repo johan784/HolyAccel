@@ -1,0 +1,64 @@
+BNN Accelerator Refactor - Verification Summary
+Date: 2026-07-17
+
+Overall result: PASS
+
+The controller + processing_element partition preserves the BNN accelerator's
+expected behavior. The consolidated bnn_core Cocotb suite completed with
+6 passed / 0 failed tests. The SoC firmware integration test also passed.
+
+Tests passed
+
+1. Reset initialization
+   - Reset returns the controller FSM to IDLE.
+   - busy, done, and result reset to zero.
+   - The processing_element accumulator resets to zero.
+
+2. Deterministic XNOR/popcount patterns
+   - Six vectors: all match, alternating match/mismatch, all mismatch, and
+     single-bit match/difference cases.
+   - XNOR and balanced popcount reduction agree with the software model.
+
+3. Random functional vectors
+   - 300 deterministic-seed random 8-word input/weight vector sets.
+   - Every accumulated neuron result equals the Python XNOR + popcount model.
+
+4. Latency / repeated functional test
+   - 50 varied random vector sets passed.
+   - Observed start-to-done latency: exactly 26 cycles for every sample.
+
+5. Controller-to-PE protocol test
+   - clear_accumulator asserted once at inference start and not reasserted.
+   - enable asserted exactly 8 times: once per 32-bit word.
+   - word_idx sequence verified as 0 through 7 (no off-by-one error).
+   - Input and weight BRAM addresses verified at base + 4*i bytes.
+   - Eight WAIT phases and eight FETCH phases verified for synchronous BRAM.
+   - Each captured input/weight pair reached the PE exactly once.
+   - busy stayed high until completion; done was only asserted after READY.
+   - Final result equals both the PE accumulator and software reference score.
+
+6. Back-to-back and busy-start behavior
+   - A start pulse while BUSY is ignored, as implemented by the FSM.
+   - A subsequent request from IDLE clears the previous PE accumulation and
+     produces its own correct result.
+
+7. SoC firmware integration
+   - CPU-to-AXI-Lite-to-BNN path completed successfully.
+   - Firmware reported the PASS LED at cycle 1799.
+   - The observed BNN result register was 132.
+
+RTL / build issues found and corrected
+
+- core_processing.sv had an extra 'end', preventing elaboration.
+- The PE accumulator result had an ambiguous 9-bit to 32-bit connection.
+  bnn_core now uses an ACCUM_WIDTH PE signal and explicitly zero-extends it
+  into the 32-bit result register.
+- The Makefile lacked the new PE and constants sources, and switching between
+  bnn_core and top_soc could reuse the wrong simulation binary. Sources and
+  per-top simulation build directories were added. Run 'make core-test' for
+  the complete direct-core suite.
+
+Conclusion
+
+No remaining functional failure was observed in the controller/PE boundary,
+the datapath result, BRAM sequencing, request handshake behavior, or SoC path.

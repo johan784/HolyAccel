@@ -1,0 +1,12 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1784794360" />
+    <testcase name="test_popcount_patterns" classname="verification.test_popcount" file="/Users/johananil/Desktop/edge/verification/test_popcount.py" lineno="17" time="0.009132146835327148" sim_time_ns="5580.0" ratio_time="611028.2829021226" />
+    <testcase name="test_random_vectors" classname="verification.test_random" file="/Users/johananil/Desktop/edge/verification/test_random.py" lineno="9" time="0.0018482208251953125" sim_time_ns="940.0" ratio_time="508597.2342621259">
+      <failure error_type="AssertionError" error_msg="random vector 0: expected 125, got 122; inputs=['0xf285b635', '0x24cd3793', '0x622607db', '0x2fbc0916', '0xe079fe10', '0x8226f9fa', '0xe32cd7fa', '0x730245f'], weights=['0x4c375f47', '0x34a14fc7', '0xe3ac1a39', '0x69fef448', '0x4e9c17f', '0x19906295', '0xdc68e3bd', '0x1a6c9a5a']" />
+    </testcase>
+    <testcase name="test_bnn_latency_statistics" classname="verification.test_latency" file="/Users/johananil/Desktop/edge/verification/test_latency.py" lineno="9" time="0.0017151832580566406" sim_time_ns="940.0" ratio_time="548046.3942174034">
+      <failure error_type="AssertionError" error_msg="Latency sample returned wrong result: expected 126, got 122" />
+    </testcase>
+  </testsuite>
+</testsuites>

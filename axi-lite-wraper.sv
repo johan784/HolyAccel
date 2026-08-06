@@ -1,4 +1,8 @@
-module bnn_axi_wrapper (
+import constants_pkg::*;
+import layer_pkg ::*;
+
+
+module bnn_axi_wrapper #(parameter int MAX_LAYERS = 16)(
     input  logic        aclk,
     input  logic        aresetn,
     // AXI-Lite Interface (Connect to System Bus)
@@ -17,20 +21,51 @@ module bnn_axi_wrapper (
     output logic        s_axi_rvalid,
     input  logic        s_axi_rready,
     output logic [1:0]  s_axi_bresp,
-    output logic [1:0] s_axi_rresp,
-    // BRAM Interface (Pass-through to your SoC memory)
+    output logic [1:0]  s_axi_rresp,
+    
+    output logic [31:0] th_bram_addr,
     output logic [31:0] inp_bram_addr,
+    input  logic [31:0] th_bram_dout,
     input  logic [31:0] inp_bram_dout,
-    output logic [31:0] wt_bram_addr,
-    input  logic [31:0] wt_bram_dout
+    // BRAM Interface (Pass-through to your SoC memory)
+    
+    
+    
+    
+    output layer_desc_t current_desc
+
 );
+
+    layer_desc_t  layer_table [0:MAX_LAYERS-1];
+
+    localparam logic [31:0] DESCRIPTOR_BASE = 32'h100;
+    logic [31:0] descriptor_offset;
+    logic [$clog2(MAX_LAYERS)-1:0] descriptor_index;
+    logic [4:0] field_offset;
 
     // Register Map
     logic [31:0] ctrl_reg;
-    logic [31:0] in_ptr_reg, wt_ptr_reg, thr_ptr_reg;
+    logic [$clog2(MAX_NEURONS_PER_BANK)-1:0] local_neuron_idx;
+
+   
+    logic [31:0] num_layers;
+    logic [$clog2(MAX_LAYERS)-1:0] current_layer;
+    assign current_desc = layer_table[current_layer];
+
+
+    logic first_layer;
+    assign first_layer = (current_layer == 0);
+
+    logic last_layer;
+
+    assign last_layer =
+    (current_layer == num_layers - 1);
+
+    logic next_layer;
+
     
 
-    logic layer_desc_t [NUM_LAYERS-1:0];
+    
 
 
     // Core Interface Signals
@@ -42,16 +77,20 @@ module bnn_axi_wrapper (
         .clk        (aclk),
         .rstn       (aresetn),
         .start      (bnn_start),
-        .in_ptr     (in_ptr_reg),
-        .wt_ptr     (wt_ptr_reg),
-        .thr_ptr    (thr_ptr_reg),
         .inp_bram_addr  (inp_bram_addr),
         .inp_bram_dout  (inp_bram_dout),
-        .wt_bram_addr  (wt_bram_addr),
-        .wt_bram_dout  (wt_bram_dout),
+
+        .th_bram_addr   (th_bram_addr),
+        .th_bram_dout   (th_bram_dout), 
+        
         .busy       (bnn_busy),
         .done       (bnn_done),
-        .result     (bnn_result)
+        .result     (bnn_result),
+        .first_layer (first_layer),
+        .last_layer (last_layer),
+        .next_layer (next_layer),
+        
+        .current_desc(current_desc)
     );
 
     logic aw_ready, w_ready, b_valid;
@@ -83,82 +122,134 @@ module bnn_axi_wrapper (
     // (Include the Decoder logic here...)
     // (Use the template I gave you, but map the registers to the inputs above)
 
-    always_ff @(posedge aclk) 
+    always_ff @(posedge aclk) begin
 
+    if (!aresetn) begin
+        ctrl_reg       <= 32'h0;
+        aw_ready       <= 1'b0;
+        w_ready        <= 1'b0;
+        b_valid        <= 1'b0;
+        ar_ready       <= 1'b0;
+        r_valid        <= 1'b0;
+        s_axi_rdata    <= 32'h0;
+        num_layers     <= '0;
+        current_layer  <= '0;
+    end
+    else begin
 
-        if(aresetn == 1'b0) begin 
-            ctrl_reg    <= 32'h0;
-            in_ptr_reg  <= 32'h0;
-            wt_ptr_reg  <= 32'h0;
-            thr_ptr_reg <= 32'h0;
-            aw_ready    <= 1'b0;
-            w_ready     <= 1'b0;
-            b_valid     <= 1'b0;
-            ar_ready    <= 1'b0;
-            r_valid     <= 1'b0;
-            s_axi_rdata <= 32'h0;
-            
-
-
-        if(s_axi_bready && b_valid) begin 
+        //--------------------------------------------------
+        // Write response channel
+        //--------------------------------------------------
+        if (s_axi_bready && b_valid)
             b_valid <= 1'b0;
-        end 
 
-        
-        if(s_axi_awvalid && s_axi_wvalid && !aw_ready) begin 
+        //--------------------------------------------------
+        // Write address/data channel
+        //--------------------------------------------------
+        if (s_axi_awvalid && s_axi_wvalid && !aw_ready) begin
 
             aw_ready <= 1'b1;
             w_ready  <= 1'b1;
             b_valid  <= 1'b1;
 
+            if (addr_write < DESCRIPTOR_BASE) begin
 
+                case (addr_write[5:0])
+                    6'h00: ctrl_reg   <= s_axi_wdata;
+                    6'h08: num_layers <= s_axi_wdata;
+                    default: ;
+                endcase
 
-            case(addr_write[5:0]) 
-                6'h00: ctrl_reg <= s_axi_wdata;
-                6'h08: in_ptr_reg <= s_axi_wdata;
-                6'h0c: wt_ptr_reg <= s_axi_wdata;
-                6'h14: thr_ptr_reg <= s_axi_wdata;
+            end
+            else begin
 
-                default: ;
-            endcase 
-        end 
-        else begin 
+                if (descriptor_index < MAX_LAYERS) begin
+
+                    case (field_offset)
+                        5'd0  : layer_table[descriptor_index].input_base      <= s_axi_wdata;
+                        5'd4  : layer_table[descriptor_index].weight_base     <= s_axi_wdata;
+                        5'd8  : layer_table[descriptor_index].threshold_base  <= s_axi_wdata;
+                        5'd12 : layer_table[descriptor_index].input_words     <= s_axi_wdata;
+                        5'd16 : layer_table[descriptor_index].output_neurons  <= s_axi_wdata;
+                        default: ;
+                    endcase
+
+                end
+
+            end
+
+        end
+        else begin
+
             aw_ready <= 1'b0;
-            w_ready <= 1'b0;
-            
+            w_ready  <= 1'b0;
 
+            // Self-clear START bit
             ctrl_reg[0] <= 1'b0;
-            
-        end 
 
-      
+        end
 
-
-
-        if(s_axi_arvalid && !ar_ready) begin 
+        //--------------------------------------------------
+        // Read channel
+        //--------------------------------------------------
+        if (s_axi_arvalid && !ar_ready) begin
 
             ar_ready <= 1'b1;
-            
             r_valid  <= 1'b1;
 
             case (addr_read[5:0])
-                    6'h00: s_axi_rdata <= ctrl_reg;
-                    6'h04: s_axi_rdata <= status_reg;
-                    6'h08: s_axi_rdata <= in_ptr_reg;
-                    6'h0C: s_axi_rdata <= wt_ptr_reg;
-                    6'h14: s_axi_rdata <= thr_ptr_reg;
-                    6'h10: s_axi_rdata <= bnn_result;
-                    default: s_axi_rdata <= 32'h0000_0000;
+                6'h00: s_axi_rdata <= ctrl_reg;
+                6'h04: s_axi_rdata <= status_reg;
+                6'h10: s_axi_rdata <= bnn_result;
+                default: s_axi_rdata <= 32'h0000_0000;
             endcase
-        end else begin 
+
+        end
+        else begin
+
             ar_ready <= 1'b0;
 
-            if(s_axi_rready && r_valid) begin 
+            if (s_axi_rready && r_valid)
                 r_valid <= 1'b0;
 
-            end 
-        end 
+        end
+
+    end
+
+end
+
+    always_comb begin
+
+        descriptor_offset = 32'd0;
+        descriptor_index  = '0;
+        field_offset      = '0;
+
+        if (addr_write >= DESCRIPTOR_BASE) begin
+
+            descriptor_offset = addr_write - DESCRIPTOR_BASE;
+            descriptor_index  = descriptor_offset >> 5;
+            field_offset      = descriptor_offset[4:0];
+
+        end
+
     end 
+
+always_ff @(posedge aclk) begin 
+    if(next_layer ==1) begin 
+        current_layer <= current_layer +1;
+    end
+
+    else if (!aresetn) begin 
+        current_layer <='0;
+    end else if(bnn_start) begin 
+        current_layer <='0;
+    end 
+
+end 
+
+
+
+
 
 
 

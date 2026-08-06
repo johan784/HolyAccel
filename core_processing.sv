@@ -8,14 +8,13 @@ module processing_element(
 
     input logic [31:0] activations_buffer,
     input logic  [31:0] weight_buffer,
-    input logic [ACCUM_WIDTH-1:0] threshold,
+    input logic signed [ACCUM_WIDTH-1:0] threshold,
 
     output logic signed [ACCUM_WIDTH-1:0]  neuron_value,
     input logic enable,
     input logic clear_accumulator
 );
 
-assign neuron_value = accumulator;
 
 logic [31:0] xnor_result;
 
@@ -35,7 +34,7 @@ assign inp= activations_buffer;
 
 logic [31:0] wt;
 assign wt = weight_buffer;
-logic [ACCUM_WIDTH-1:0]   accumulator;
+logic signed [ACCUM_WIDTH-1:0]   accumulator;
 
 
 
@@ -84,5 +83,13 @@ always_comb begin
                 sum_reg = stage4[0] + stage4[1];
                 
 end 
-endmodule 
-    
+
+always_comb begin 
+    if(accumulator > threshold) begin
+        neuron_value = 1;
+    end
+    else begin 
+        neuron_value = 0;
+    end
+end
+endmodule

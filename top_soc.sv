@@ -26,7 +26,8 @@ logic [ 3:0] mem_wstrb;
 logic [31:0] mem_rdata;
 
 logic [31:0] inp_bram [0: 16383];
-logic [31:0] wt_bram [0:16383];
+logic [31:0] th_bram [0: 16383];
+
 logic [31:0] bram [0:16383];
 
 logic [13:0] bram_addr;
@@ -44,13 +45,14 @@ assign led = led_reg;
 
 logic select_led;
 logic select_inp_bram;
-logic select_wt_bram;
+logic select_th_bram;
 logic select_bram;
 logic select_bnn_axi;
 
 
 logic [31:0] inp_bram_addr, inp_bram_dout;
-logic [31:0] wt_bram_addr,  wt_bram_dout;
+logic [31:0] th_bram_addr, th_bram_dout;
+
 
 
 
@@ -90,7 +92,7 @@ bnn_axi_wrapper u_bnn_accelerator (
     .aresetn       (!rst),
 
     
-    .s_axi_awaddr  (mem_addr),
+    .s_axi_awaddr  (mem_addr-32'h3000_0000),
     .s_axi_awvalid (select_bnn_axi && (|mem_wstrb) && mem_valid),
     .s_axi_awready (axi_awready),
     .s_axi_wdata   (mem_wdata),
@@ -101,7 +103,7 @@ bnn_axi_wrapper u_bnn_accelerator (
     .s_axi_bresp   (/* unconnected */),
 
     // AXI Read Address & Data
-    .s_axi_araddr  (mem_addr),
+    .s_axi_araddr  (mem_addr-32'h3000_0000),
     .s_axi_arvalid (select_bnn_axi && (~|mem_wstrb) && mem_valid),
     .s_axi_arready (axi_arready),
     .s_axi_rdata   (axi_rdata),
@@ -112,8 +114,9 @@ bnn_axi_wrapper u_bnn_accelerator (
     // BRAM Direct Ports (Port B)
     .inp_bram_addr (inp_bram_addr),
     .inp_bram_dout (inp_bram_dout),
-    .wt_bram_addr  (wt_bram_addr),
-    .wt_bram_dout  (wt_bram_dout)
+    .th_bram_addr  (th_bram_addr),
+    .th_bram_dout  (th_bram_dout)
+   
 );
 
 
@@ -129,9 +132,9 @@ always_comb begin
     select_led = 1'b0;
     select_bram = 1'b0;
     select_inp_bram = 1'b0;
+    select_th_bram = 1'b0;
     select_bnn_axi = 1'b0;
-    select_wt_bram = 1'b0;
-
+   
 
     if(mem_addr <= 32'h0000FFFF) begin 
         select_bram = 1'b1;
@@ -140,9 +143,9 @@ always_comb begin
         select_inp_bram = 1'b1;
     end 
     else if ( mem_addr >=  32'h50000000 && mem_addr <= 32'h5000FFFF) begin
-        select_wt_bram = 1'b1;
-    end 
-    else if (mem_addr >= 32'h3000_0000 && mem_addr <= 32'h3000_00FF) begin
+        select_th_bram = 1'b1;
+    end
+    else if (mem_addr >= 32'h3000_0000 && mem_addr <= 32'h3000_02FF) begin
         select_bnn_axi = 1'b1;
     end 
     else if (mem_addr == 32'h80000000) begin 
@@ -160,7 +163,12 @@ end
 
 always_ff @(posedge clk) begin 
     inp_bram_dout <= inp_bram[inp_bram_addr[15:2]];
-    wt_bram_dout <= wt_bram[wt_bram_addr[15:2]];
+    
+end 
+
+always_ff @(posedge clk) begin
+    th_bram_dout <= th_bram[th_bram_addr[15:2]];
+    
 end 
 
 
@@ -181,13 +189,13 @@ always_ff @(posedge clk) begin
             
             mem_rdata <= inp_bram[bram_addr];
         end 
-         else if ( (select_wt_bram) && (mem_valid) ) begin 
-            
-            mem_rdata <= wt_bram[bram_addr];
-        end
+        
         else if ( (select_bram) && (mem_valid) ) begin 
             
             mem_rdata <= bram[bram_addr];
+        end
+        else if ( (select_th_bram) && (mem_valid) ) begin
+            mem_rdata <= th_bram[bram_addr];
         end
         else if ( (select_bnn_axi) && (mem_valid) ) begin
             mem_rdata <= axi_rdata; 
@@ -200,13 +208,15 @@ always_ff @(posedge clk) begin
             if (mem_wstrb[2]) inp_bram[bram_addr][23:16] <= mem_wdata[23:16];
             if (mem_wstrb[3]) inp_bram[bram_addr][31:24] <= mem_wdata[31:24];
         end 
-        if ( select_wt_bram && mem_valid && (!mem_ready_reg) && (mem_wstrb[0] | mem_wstrb[1] | mem_wstrb[2] | mem_wstrb [3])) begin 
-            
-            if (mem_wstrb[0]) wt_bram[bram_addr][7:0]   <= mem_wdata[7:0];
-            if (mem_wstrb[1]) wt_bram[bram_addr][15:8]  <= mem_wdata[15:8];
-            if (mem_wstrb[2]) wt_bram[bram_addr][23:16] <= mem_wdata[23:16];
-            if (mem_wstrb[3]) wt_bram[bram_addr][31:24] <= mem_wdata[31:24];
-        end 
+
+        if ( select_th_bram && mem_valid && (!mem_ready_reg) && (mem_wstrb[0] | mem_wstrb[1] | mem_wstrb[2] | mem_wstrb [3])) begin
+
+            if (mem_wstrb[0]) th_bram[bram_addr][7:0]   <= mem_wdata[7:0];
+            if (mem_wstrb[1]) th_bram[bram_addr][15:8]  <= mem_wdata[15:8];
+            if (mem_wstrb[2]) th_bram[bram_addr][23:16] <= mem_wdata[23:16];
+            if (mem_wstrb[3]) th_bram[bram_addr][31:24] <= mem_wdata[31:24];
+        end
+       
         if ( select_bram && mem_valid && (!mem_ready_reg) && (mem_wstrb[0] | mem_wstrb[1] | mem_wstrb[2] | mem_wstrb [3])) begin 
             
             if (mem_wstrb[0]) bram[bram_addr][7:0]   <= mem_wdata[7:0];
@@ -241,5 +251,3 @@ end
 endmodule 
 
             
-
-

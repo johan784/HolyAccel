@@ -84,6 +84,7 @@ logic [31:0] weights_buffer_A [0:NUM_PE-1][0:TOTAL_WORDS-1];
 logic [31:0] weights_buffer_B [0:NUM_PE-1][0:TOTAL_WORDS-1];
 
 logic signed [ACCUM_WIDTH-1:0] threshold_buffer [0:NUM_PE-1];
+logic [4:0] weight_offset;
 
 genvar i;
 integer j;
@@ -101,7 +102,7 @@ generate
                     activation_buffer_A[word_idx] :
                     activation_buffer_B[word_idx]
             ),
-                .weights_buffer(
+                .weight_buffer(
                     wt_select ?
                     weights_buffer_A[i][word_idx] :
                     weights_buffer_B[i][word_idx]
@@ -198,6 +199,9 @@ always_ff @(posedge clk) begin
 
                 CONFIG_LAYER: begin
 
+                           $display(">>> CONFIG_LAYER: weight_base = %0d, input_words = %0d, output_neurons = %0d", 
+                                current_desc.weight_base, current_desc.input_words, current_desc.output_neurons);
+
                         in_ptr_reg         <= current_desc.input_base;
                         
                         thr_ptr_reg        <= current_desc.threshold_base;
@@ -205,9 +209,19 @@ always_ff @(posedge clk) begin
                         output_neurons <= current_desc.output_neurons;
                         word_idx       <= '0;
                         neuron_idx     <= '0;
-                        
+                        weight_offset <= current_desc.weight_base[4:0];
                         activ_word_idx <='0;
                         neuron_counter <='0;
+                        thresh_pe_idx <='0;
+    
+
+                        for (int w = 0; w < 8; w++) begin
+                            // Calculate how many 32-bit words this layer will output
+                            if (w < ((current_desc.output_neurons + 31) >> 5)) begin
+                                if (act_select) activation_buffer_B[w] <= '0;
+                                else            activation_buffer_A[w] <= '0;
+                            end 
+                        end
 
                         inp_bram_addr <= current_desc.input_base;
                         th_bram_addr  <= current_desc.threshold_base;
@@ -225,6 +239,12 @@ always_ff @(posedge clk) begin
                         end 
 
                         local_neuron_idx <= '0;
+
+                        
+                        for (int w = 0; w < BATCH_PE; w++) begin
+                            if (act_select) activation_buffer_B[w] <= '0;
+                            else            activation_buffer_A[w] <= '0;
+                        end
 
 
                 end 
@@ -266,11 +286,25 @@ always_ff @(posedge clk) begin
                 end 
 
                 INITIAL_FETCH_WEIGHTS: begin 
+
+                    if (word_idx == 0) begin
+                        $display(">>> RTL FETCH: offset=%0d + local=%0d => ACTUAL slot=%0d (desc says %0d)",
+                        weight_offset, local_neuron_idx,
+                        weight_offset + local_neuron_idx,
+                        current_desc.weight_base[4:0]);
+                    end
+
+                    // In INITIAL_FETCH_WEIGHTS, next to your other print:
+                    if (word_idx == 0)
+                        $display(">>> L1 CHECK: first weight word fetched = %h", weights_buffer_B[0][0]);
+
+
+
                     
                     if(wt_select) begin
                         for(g=0;g<BATCH_PE;g++) begin
 
-                               weights_buffer_A[g][word_idx]<=weight_bank[g][local_neuron_idx][word_idx];
+                               weights_buffer_A[g][word_idx]<=weight_bank[g][weight_offset + local_neuron_idx][word_idx];
                         end
 
                         word_idx <= word_idx +1;
@@ -283,7 +317,7 @@ always_ff @(posedge clk) begin
                     end else begin
                         for(g=0;g<BATCH_PE;g++) begin
 
-                                weights_buffer_B[g][word_idx] <= weight_bank[g][local_neuron_idx][word_idx];
+                                weights_buffer_B[g][word_idx] <= weight_bank[g][weight_offset + local_neuron_idx][word_idx];
                         end
 
                         word_idx <= word_idx + 1;
@@ -294,10 +328,15 @@ always_ff @(posedge clk) begin
                         end
                         
                     end
+                end 
 
                  
 
                 FETCH_THRESHOLDS : begin 
+
+                    // In FETCH_THRESHOLDS:
+                    $display(">>> TH LOAD: pe=%0d th=%0d", thresh_pe_idx, th_bram_dout);
+
 
                     if (thresh_pe_idx < BATCH_PE) begin
                         threshold_buffer[thresh_pe_idx] <= th_bram_dout;
@@ -325,7 +364,7 @@ always_ff @(posedge clk) begin
 
                                 for (g = 0; g < BATCH_PE; g++) begin
                                     weights_buffer_B[g][word_idx]
-                                        <= weight_bank[g][local_neuron_idx + 1][word_idx];
+                                        <= weight_bank[g][weight_offset+ local_neuron_idx + 1][word_idx];
                                 end
                             end 
                                 else begin
@@ -334,7 +373,7 @@ always_ff @(posedge clk) begin
 
                                     for (g = 0; g < BATCH_PE; g++) begin
                                         weights_buffer_A[g][word_idx]
-                                            <= weight_bank[g][local_neuron_idx + 1][word_idx];
+                                            <= weight_bank[g][weight_offset + local_neuron_idx + 1][word_idx];
                                     end
 
                                 end
@@ -366,16 +405,8 @@ always_ff @(posedge clk) begin
 
                 end
                 LOAD_OUTPUT: begin 
-    
-                    if (neuron_counter + BATCH_PE >= output_neurons) begin
-                        if (act_select) begin
-                            // Output is going to Buffer B. Zero the last word.
-                            activation_buffer_B[(output_neurons - 1) >> 5] <= '0;
-                        end else begin
-                            // Output is going to Buffer A. Zero the last word.
-                            activation_buffer_A[(output_neurons - 1) >> 5] <= '0;
-                        end
-                    end
+
+                    
 
                     if (act_select) begin
                         // Writing to Buffer B
@@ -434,7 +465,10 @@ always_ff @(posedge clk) begin
                     state  <= IDLE;
                 end
 
-                default: state <= IDLE;
+                default: begin 
+                    state <= IDLE;
+                end 
+
             endcase
         end
     end
@@ -454,4 +488,6 @@ always_comb begin
     end   
 
 end 
+
+
 endmodule

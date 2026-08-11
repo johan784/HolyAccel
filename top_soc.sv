@@ -87,6 +87,8 @@ logic        axi_arready, axi_rvalid;
 logic [31:0] axi_rdata;
 
 // --- Accelerator Instantiation ---
+/* verilator lint_off PINMISSING */
+
 bnn_axi_wrapper u_bnn_accelerator (
     .aclk          (clk),
     .aresetn       (!rst),
@@ -118,6 +120,7 @@ bnn_axi_wrapper u_bnn_accelerator (
     .th_bram_dout  (th_bram_dout)
    
 );
+/* verilator lint_on PINMISSING */
 
 
 

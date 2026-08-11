@@ -1,59 +1,102 @@
-# Default to Verilator since your snippet uses it, but Icarus works too
-SIM ?= verilator
-TOPLEVEL_LANG = verilog
-.DEFAULT_GOAL := sim
-# Keep simulator products separate when switching between the SoC and bnn_core
-# test targets; otherwise cocotb can reuse a binary for the wrong top level.
-SIM_BUILD ?= sim_build/$(TOPLEVEL)
+# Makefile for BNN Accelerator Verification
+# One command: `make` runs the full regression under Verilator.
+# From scratch: `make clean && make`.
 
-# Enable tracing for Surfer (.vcd or .fst output)
+SIM ?= verilator
+TOPLEVEL_LANG ?= verilog
+
+# =========================
+# SIMULATOR FLAGS
+# =========================
 ifeq ($(SIM),verilator)
-    EXTRA_ARGS += --trace --trace-structs --sv --timing
+	# --public-flat-rw : expose internals (state, weight_bank, buffers) to cocotb
+	# -Wno-WIDTH       : suppress width pedantry (functionally safe)
+	EXTRA_ARGS += --trace --trace-structs --sv --timing -Wno-WIDTH --public-flat-rw
 else ifeq ($(SIM),icarus)
-    # Icarus specific flags if you switch
-    COMPILE_ARGS += -g2012 
+	COMPILE_ARGS += -g2012
 endif
 
 # =========================
-# SOURCES
+# SOURCES (paths match repo root)
 # =========================
 
-# Point directly to your new clean SoC files
-VERILOG_SOURCES = \
-   fsm_pkg.sv \
-   constants_pkg.sv \
-   layer_pkg.sv \
-   core_processing.sv \
-   picorv32.v \
-   top_soc.sv \
-   axi-lite-wraper.sv \
-   bnn_core.sv \
- 
+PE_VERILOG_SOURCES = \
+	fsm_pkg.sv \
+	constants_pkg.sv \
+	core_processing.sv
 
+CORE_VERILOG_SOURCES = \
+	tb_weight_preload.sv \
+	fsm_pkg.sv \
+	constants_pkg.sv \
+	layer_pkg.sv \
+	core_processing.sv \
+	bnn_core.sv
 
-# =========================
-# TOP LEVEL HARDWARE MODULE
-# =========================
-
-TOPLEVEL = top_soc
+WRAPPER_VERILOG_SOURCES = \
+	$(CORE_VERILOG_SOURCES) \
+	axi-lite-wraper.sv
 
 # =========================
-# PYTHON TEST MODULE
+# REGRESSION
 # =========================
 
-# This tells Cocotb to look for verification/test_soc.py by default.
-MODULE = verification.test_soc
+.PHONY: all clean pe_test single_layer_test network_test axi_test
 
-CORE_VERILOG_SOURCES = fsm_pkg.sv constants_pkg.sv layer_pkg.sv core_processing.sv bnn_core.sv
+all: pe_test single_layer_test network_test axi_test
+	@echo ""
+	@echo "=============================="
+	@echo "=== FULL REGRESSION PASSED ==="
+	@echo "=============================="
 
-.PHONY: core-test
-core-test:
-	$(MAKE) TOPLEVEL=bnn_core SIM_BUILD=sim_build/bnn_core \
-		MODULE='verification.test_reset,verification.test_popcount,verification.test_random,verification.test_latency,verification.test_controller_pe' \
-		VERILOG_SOURCES='$(CORE_VERILOG_SOURCES)' SIM=$(SIM)
+clean::
+	rm -rf sim_build* results.xml __pycache__ verification/__pycache__ *.vcd
+
+pe_test:
+	@echo "--- Running PE Unit Tests ---"
+	@+$(MAKE) sim \
+	  SIM=$(SIM) \
+	  TOPLEVEL=processing_element \
+	  VERILOG_SOURCES="$(PE_VERILOG_SOURCES)" \
+	  COCOTB_TEST_MODULES="verification.test_pe_unit" \
+	  SIM_BUILD="sim_build_pe"
+
+single_layer_test:
+	@echo "--- Running Single-Layer Core Tests ---"
+	@+$(MAKE) sim \
+	  SIM=$(SIM) \
+	  TOPLEVEL=bnn_core \
+	  VERILOG_SOURCES="$(CORE_VERILOG_SOURCES)" \
+	  COCOTB_TEST_MODULES="test_layer_single" \
+	  SIM_BUILD="sim_build_core_single"
+
+network_test:
+	@echo "--- Running Multi-Layer Network Test ---"
+	@+$(MAKE) sim \
+	  SIM=$(SIM) \
+	  TOPLEVEL=bnn_core \
+	  VERILOG_SOURCES="$(CORE_VERILOG_SOURCES)" \
+	  COCOTB_TEST_MODULES="test_network_6layer" \
+	  SIM_BUILD="sim_build_core_network"
+
+axi_test:
+	@echo "--- Running AXI Wrapper Sequencing Test ---"
+	@+$(MAKE) sim \
+	  SIM=$(SIM) \
+	  TOPLEVEL=bnn_axi_wrapper \
+	  VERILOG_SOURCES="$(WRAPPER_VERILOG_SOURCES)" \
+	  COCOTB_TEST_MODULES="test_axi_seq" \
+	  SIM_BUILD="sim_build_axi_wrapper"
+
+COCOTB_REDUCED_LOG_FMT=1
+export COCOTB_REDUCED_LOG_FMT
 
 # =========================
 # COCOTB FRAMEWORK
 # =========================
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
+
+# MUST be after the include and MUST be 'all': cocotb's Makefile.inc sets
+# .DEFAULT_GOAL := sim when included, which would otherwise win.
+.DEFAULT_GOAL := all

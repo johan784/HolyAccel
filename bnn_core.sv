@@ -29,6 +29,8 @@ module bnn_core (
     output logic next_layer,
     input logic first_layer,
     input logic last_layer,
+
+    input logic [11:0] pe_accum,
     
     input layer_desc_t current_desc
     
@@ -43,6 +45,8 @@ logic [$clog2(NUM_PE+1):0] thresh_pe_idx;
 logic [$clog2(NUM_PE+1)-1:0] BATCH_PE;
 
 logic [$clog2(MAX_NEURONS):0] neuron_idx;
+
+logic [11:0] accum_out [0:MAX_NEURONS-1];
 
 
 logic [31:0] input_words;
@@ -111,6 +115,7 @@ generate
                 .enable(enable),
                 .clear_accumulator(clear_accumulator),
                 .neuron_value(pe_result[i])
+                .accumulator(pe_accum[i])
             );
     end 
 endgenerate 
@@ -405,6 +410,16 @@ always_ff @(posedge clk) begin
 
                 end
                 LOAD_OUTPUT: begin 
+
+
+                    if(last_layer) begin 
+                        for(k=0;k<NUM_PE;k++) begin 
+                            if(k<BATCH_PE) begin 
+                                gn <= neuron_counter +k;
+                                accum_out[gn] <= pe_accum[k];
+                            end 
+                        end 
+                    end 
 
                     
 

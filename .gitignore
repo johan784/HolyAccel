@@ -1,0 +1,11 @@
+# simulation build artifacts
+sim_build*/
+dump.vcd
+results.xml
+# python
+__pycache__/
+*.pyc
+data/
+# os + archives
+.DS_Store
+*.zip

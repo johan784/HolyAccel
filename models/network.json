@@ -1,0 +1,20 @@
+[
+ {
+  "input_words": 25,
+  "output_neurons": 144,
+  "weight_offset": 0,
+  "threshold_base": 0
+ },
+ {
+  "input_words": 5,
+  "output_neurons": 96,
+  "weight_offset": 18,
+  "threshold_base": 2048
+ },
+ {
+  "input_words": 3,
+  "output_neurons": 10,
+  "weight_offset": 30,
+  "threshold_base": 4096
+ }
+]

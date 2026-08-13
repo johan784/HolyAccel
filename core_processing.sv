@@ -13,6 +13,8 @@ module processing_element(
     output logic signed [ACCUM_WIDTH-1:0]  neuron_value,
     input logic enable,
     input logic clear_accumulator
+
+    output logic signed  [ACCUM_WIDTH-1:0] accumulator
 );
 
 

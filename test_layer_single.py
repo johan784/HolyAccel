@@ -89,8 +89,7 @@ class BNNCoreTB:
             if int(self.dut.done.value) == 1:
                 break
         else:
-            raise cocotb.result.TestFailure(f"Timeout waiting for done. State: {int(self.dut.state.value)}")
-
+            raise RuntimeError(f"Timeout waiting for done. State: {int(self.dut.state.value)}")
         # Read output buffer
         await ReadOnly()
         act_select = int(self.dut.act_select.value)

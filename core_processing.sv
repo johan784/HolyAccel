@@ -12,7 +12,7 @@ module processing_element(
 
     output logic signed [ACCUM_WIDTH-1:0]  neuron_value,
     input logic enable,
-    input logic clear_accumulator
+    input logic clear_accumulator,
 
     output logic signed  [ACCUM_WIDTH-1:0] accumulator
 );
@@ -36,7 +36,7 @@ assign inp= activations_buffer;
 
 logic [31:0] wt;
 assign wt = weight_buffer;
-logic signed [ACCUM_WIDTH-1:0]   accumulator;
+
 
 
 

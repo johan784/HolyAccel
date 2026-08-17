@@ -29,8 +29,10 @@ module bnn_core (
     output logic next_layer,
     input logic first_layer,
     input logic last_layer,
+    output logic [119:0] score_out,
 
-    input logic [11:0] pe_accum,
+    
+
     
     input layer_desc_t current_desc
     
@@ -40,6 +42,8 @@ logic enable;
 logic clear_accumulator;
 logic [ACCUM_WIDTH-1:0] pe_result [NUM_PE-1:0];
 
+assign score_out = {accum_out[9],accum_out[8],accum_out[7],accum_out[6],accum_out[5],accum_out[4],accum_out[3],accum_out[2],accum_out[1],accum_out[0]}; 
+
 logic [$clog2(NUM_PE+1):0] thresh_pe_idx;
 
 logic [$clog2(NUM_PE+1)-1:0] BATCH_PE;
@@ -47,6 +51,8 @@ logic [$clog2(NUM_PE+1)-1:0] BATCH_PE;
 logic [$clog2(MAX_NEURONS):0] neuron_idx;
 
 logic [11:0] accum_out [0:MAX_NEURONS-1];
+
+logic signed [11:0] pe_accum [0:NUM_PE-1];
 
 
 logic [31:0] input_words;
@@ -96,6 +102,8 @@ integer k;
 integer g;
 
 
+
+
 generate 
     for(i=0;i<NUM_PE;i++) begin: pe_array
         processing_element pe (
@@ -114,7 +122,7 @@ generate
                 .threshold(threshold_buffer[i]),
                 .enable(enable),
                 .clear_accumulator(clear_accumulator),
-                .neuron_value(pe_result[i])
+                .neuron_value(pe_result[i]),
                 .accumulator(pe_accum[i])
             );
     end 
@@ -160,6 +168,7 @@ always_ff @(posedge clk) begin
 
                     input_words     <= '0;
                     output_neurons  <= '0;
+                    BATCH_PE <= '0;
 
                     
                     word_idx        <= '0;
@@ -203,10 +212,10 @@ always_ff @(posedge clk) begin
                 end
 
                 CONFIG_LAYER: begin
-
+                        `ifdef BNN_DEBUG
                            $display(">>> CONFIG_LAYER: weight_base = %0d, input_words = %0d, output_neurons = %0d", 
                                 current_desc.weight_base, current_desc.input_words, current_desc.output_neurons);
-
+                        `endif
                         in_ptr_reg         <= current_desc.input_base;
                         
                         thr_ptr_reg        <= current_desc.threshold_base;
@@ -246,10 +255,7 @@ always_ff @(posedge clk) begin
                         local_neuron_idx <= '0;
 
                         
-                        for (int w = 0; w < BATCH_PE; w++) begin
-                            if (act_select) activation_buffer_B[w] <= '0;
-                            else            activation_buffer_A[w] <= '0;
-                        end
+                        
 
 
                 end 
@@ -292,16 +298,13 @@ always_ff @(posedge clk) begin
 
                 INITIAL_FETCH_WEIGHTS: begin 
 
-                    if (word_idx == 0) begin
-                        $display(">>> RTL FETCH: offset=%0d + local=%0d => ACTUAL slot=%0d (desc says %0d)",
-                        weight_offset, local_neuron_idx,
-                        weight_offset + local_neuron_idx,
-                        current_desc.weight_base[4:0]);
-                    end
+                    
 
                     // In INITIAL_FETCH_WEIGHTS, next to your other print:
                     if (word_idx == 0)
-                        $display(">>> L1 CHECK: first weight word fetched = %h", weights_buffer_B[0][0]);
+                        `ifdef BNN_DEBUG
+                            $display(">>> L1 CHECK: first weight word fetched = %h", weights_buffer_B[0][0]);
+                        `endif
 
 
 
@@ -340,7 +343,9 @@ always_ff @(posedge clk) begin
                 FETCH_THRESHOLDS : begin 
 
                     // In FETCH_THRESHOLDS:
-                    $display(">>> TH LOAD: pe=%0d th=%0d", thresh_pe_idx, th_bram_dout);
+                    `ifdef BNN_DEBUG
+                        $display(">>> TH LOAD: pe=%0d th=%0d", thresh_pe_idx, th_bram_dout);
+                    `endif
 
 
                     if (thresh_pe_idx < BATCH_PE) begin
@@ -415,7 +420,7 @@ always_ff @(posedge clk) begin
                     if(last_layer) begin 
                         for(k=0;k<NUM_PE;k++) begin 
                             if(k<BATCH_PE) begin 
-                                gn <= neuron_counter +k;
+                                gn = neuron_counter +k;
                                 accum_out[gn] <= pe_accum[k];
                             end 
                         end 

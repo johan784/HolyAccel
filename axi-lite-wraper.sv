@@ -36,6 +36,8 @@ module bnn_axi_wrapper #(parameter int MAX_LAYERS = 16)(
 
 );
 
+    logic [119:0] score_out;
+
     layer_desc_t  layer_table [0:MAX_LAYERS-1];
 
     localparam logic [31:0] DESCRIPTOR_BASE = 32'h100;
@@ -89,6 +91,7 @@ module bnn_axi_wrapper #(parameter int MAX_LAYERS = 16)(
         .first_layer (first_layer),
         .last_layer (last_layer),
         .next_layer (next_layer),
+        .score_out (score_out),
         
         .current_desc(current_desc)
     );
@@ -201,6 +204,11 @@ module bnn_axi_wrapper #(parameter int MAX_LAYERS = 16)(
                 6'h00: s_axi_rdata <= ctrl_reg;
                 6'h04: s_axi_rdata <= status_reg;
                 6'h10: s_axi_rdata <= bnn_result;
+                6'h20: s_axi_rdata <= {8'b0, score_out[23:12],  score_out[11:0]};
+                6'h24: s_axi_rdata <= {8'b0, score_out[47:36],  score_out[35:24]};
+                6'h28: s_axi_rdata <= {8'b0, score_out[71:60],  score_out[59:48]};
+                6'h2C: s_axi_rdata <= {8'b0, score_out[95:84],  score_out[83:72]};
+                6'h30: s_axi_rdata <= {8'b0, score_out[119:108],score_out[107:96]};
                 default: s_axi_rdata <= 32'h0000_0000;
             endcase
 

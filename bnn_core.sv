@@ -301,7 +301,7 @@ always_ff @(posedge clk) begin
                     
 
                     // In INITIAL_FETCH_WEIGHTS, next to your other print:
-                    if (word_idx == 0)
+                    
                         `ifdef BNN_DEBUG
                             $display(">>> L1 CHECK: first weight word fetched = %h", weights_buffer_B[0][0]);
                         `endif

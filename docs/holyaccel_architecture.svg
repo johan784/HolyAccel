@@ -1,171 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1125" viewBox="0 0 1800 1125" role="img" aria-labelledby="title desc">
   <title id="title">HolyAccel BNN accelerator architecture</title>
-  <desc id="desc">System architecture showing a PicoRV32 host, AXI-Lite control, SRAM-backed memory system, and eight parallel XNOR-popcount processing elements.</desc>
+  <desc id="desc">A clean system diagram showing a PicoRV32 host, AXI-Lite control, SRAM-backed memory system, and eight parallel XNOR-popcount processing elements.</desc>
   <defs>
     <linearGradient id="chipStroke" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#f08068"/>
-      <stop offset="0.48" stop-color="#bc76c8"/>
-      <stop offset="1" stop-color="#55a9df"/>
+      <stop offset="0" stop-color="#ef826c"/><stop offset="0.50" stop-color="#b978c4"/><stop offset="1" stop-color="#59a9dc"/>
     </linearGradient>
     <linearGradient id="coreStroke" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#d7ab75"/>
-      <stop offset="1" stop-color="#63a9d9"/>
+      <stop offset="0" stop-color="#d3a471"/><stop offset="1" stop-color="#67a8d3"/>
     </linearGradient>
-    <marker id="arrowWarm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#d9a078"/>
-    </marker>
-    <marker id="arrowCool" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#71add4"/>
-    </marker>
+    <marker id="arrowWarm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#d59d76"/></marker>
+    <marker id="arrowCool" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#70acd3"/></marker>
     <style>
-      .title { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 600; letter-spacing: 1.5px; fill: #f4f5f6; }
-      .meta { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 2px; fill: #8f99a3; }
-      .section { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 2px; fill: #aab2bb; }
-      .label { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 500; fill: #f0f2f4; }
-      .small { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 17px; font-weight: 400; fill: #c9ced3; }
-      .tiny { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 500; letter-spacing: .7px; fill: #929ca6; }
-      .micro { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: .5px; fill: #aab2ba; }
+      .title { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 29px; font-weight: 600; letter-spacing: 1.6px; fill: #f4f5f6; }
+      .meta { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 2px; fill: #949da6; }
+      .section { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 17px; font-weight: 600; letter-spacing: 2.2px; fill: #aeb6be; }
+      .label { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 23px; font-weight: 500; fill: #f0f2f4; }
+      .body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; fill: #d3d7db; }
+      .small { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 500; letter-spacing: .55px; fill: #959fa9; }
+      .micro { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: .55px; fill: #929ca6; }
       .box { fill: #080a0c; stroke-width: 2; }
-      .wireWarm { fill: none; stroke: #d9a078; stroke-width: 2; marker-end: url(#arrowWarm); }
-      .wireCool { fill: none; stroke: #71add4; stroke-width: 2; marker-end: url(#arrowCool); }
-      .wirePlain { fill: none; stroke: #7f8992; stroke-width: 1.5; }
+      .wireWarm { fill: none; stroke: #d59d76; stroke-width: 2; marker-end: url(#arrowWarm); }
+      .wireCool { fill: none; stroke: #70acd3; stroke-width: 2; marker-end: url(#arrowCool); }
+      .wirePlain { fill: none; stroke: #77818a; stroke-width: 1.5; }
     </style>
   </defs>
 
-  <rect width="1600" height="1000" fill="#050607"/>
+  <rect width="1800" height="1125" fill="#050607"/>
+  <text x="52" y="58" class="title">HOLYACCEL // BNN ACCELERATOR</text>
+  <text x="1748" y="58" class="meta" text-anchor="end">SYSTEM ARCHITECTURE · SKY130</text>
+  <rect x="44" y="92" width="1712" height="952" rx="7" fill="none" stroke="url(#chipStroke)" stroke-width="5"/>
 
-  <text x="50" y="55" class="title">HOLYACCEL // BNN ACCELERATOR</text>
-  <text x="1550" y="55" class="meta" text-anchor="end">SYSTEM ARCHITECTURE · SKY130</text>
+  <!-- HOST SYSTEM -->
+  <rect x="76" y="126" width="330" height="840" rx="4" fill="none" stroke="#d77f70" stroke-width="2"/>
+  <text x="102" y="162" class="section">HOST SYSTEM</text>
+  <rect x="102" y="194" width="278" height="114" rx="3" class="box" stroke="#dc8772"/>
+  <text x="241" y="242" class="label" text-anchor="middle">PicoRV32 CPU</text>
+  <text x="241" y="272" class="small" text-anchor="middle">FIRMWARE</text>
+  <text x="241" y="292" class="small" text-anchor="middle">NETWORK DESCRIPTORS</text>
+  <path d="M241 308 V348" class="wireWarm"/>
+  <rect x="102" y="350" width="278" height="110" rx="3" class="box" stroke="#d98c74"/>
+  <text x="241" y="397" class="body" text-anchor="middle">System Bus</text>
+  <text x="241" y="425" class="body" text-anchor="middle">+ Address Decode</text>
+  <text x="241" y="447" class="micro" text-anchor="middle">MEMORY-MAPPED INTERCONNECT</text>
+  <path d="M241 460 V504 M148 504 H334" class="wirePlain"/>
+  <path d="M148 504 V526 M241 504 V526 M334 504 V526" class="wirePlain"/>
+  <rect x="102" y="528" width="88" height="132" rx="3" class="box" stroke="#ca8e79"/>
+  <text x="146" y="582" class="body" text-anchor="middle">Program</text><text x="146" y="611" class="body" text-anchor="middle">RAM</text>
+  <rect x="197" y="528" width="88" height="132" rx="3" class="box" stroke="#bf927e"/>
+  <text x="241" y="582" class="body" text-anchor="middle">Input</text><text x="241" y="611" class="body" text-anchor="middle">BRAM</text>
+  <rect x="292" y="528" width="88" height="132" rx="3" class="box" stroke="#b39785"/>
+  <text x="336" y="574" class="body" text-anchor="middle">Threshold</text><text x="336" y="603" class="body" text-anchor="middle">BRAM</text>
+  <text x="241" y="910" class="small" text-anchor="middle">PROGRAM + INPUT STORAGE</text>
 
-  <rect x="48" y="92" width="1504" height="824" rx="7" fill="none" stroke="url(#chipStroke)" stroke-width="5"/>
+  <!-- CONTROL -->
+  <rect x="434" y="126" width="390" height="840" rx="4" fill="none" stroke="#b29a89" stroke-width="2"/>
+  <text x="460" y="162" class="section">CONTROL</text>
+  <path d="M380 405 H420 V242 H460" class="wireWarm"/>
+  <rect x="462" y="194" width="334" height="96" rx="3" class="box" stroke="#ba9986"/>
+  <text x="629" y="237" class="label" text-anchor="middle">AXI4-Lite Wrapper</text>
+  <text x="629" y="266" class="small" text-anchor="middle">CONFIGURATION INTERFACE</text>
+  <path d="M629 290 V326" class="wireWarm"/>
+  <rect x="462" y="328" width="334" height="96" rx="3" class="box" stroke="#b29c8b"/>
+  <text x="629" y="368" class="body" text-anchor="middle">Control + Status Registers</text>
+  <text x="629" y="398" class="small" text-anchor="middle">CTRL · STATUS · NUM_LAYERS</text>
+  <path d="M629 424 V458" class="wireWarm"/>
+  <rect x="462" y="460" width="334" height="112" rx="3" class="box" stroke="#a9a091"/>
+  <text x="629" y="500" class="body" text-anchor="middle">16-entry Layer Descriptor Table</text>
+  <text x="629" y="530" class="small" text-anchor="middle">INPUT · WEIGHTS · THRESHOLDS</text>
+  <text x="629" y="552" class="small" text-anchor="middle">DIMENSIONS · OUTPUT COUNT</text>
+  <path d="M629 572 V612" class="wireWarm"/>
+  <rect x="462" y="614" width="334" height="126" rx="3" class="box" stroke="#9fa496"/>
+  <text x="629" y="661" class="label" text-anchor="middle">Layer Sequencer</text>
+  <text x="629" y="692" class="body" text-anchor="middle">Autonomous execution</text>
+  <text x="629" y="720" class="small" text-anchor="middle">CURRENT · FIRST · LAST · NEXT</text>
+  <text x="629" y="892" class="small" text-anchor="middle">SOFTWARE CONFIGURES ONCE</text>
+  <text x="629" y="916" class="small" text-anchor="middle">HARDWARE RUNS THE NETWORK</text>
 
-  <!-- System -->
-  <rect x="78" y="126" width="312" height="742" rx="4" fill="none" stroke="#d77f70" stroke-width="2"/>
-  <text x="102" y="160" class="section">HOST SYSTEM</text>
+  <!-- BNN CORE -->
+  <rect x="852" y="126" width="872" height="840" rx="4" fill="none" stroke="url(#coreStroke)" stroke-width="2.5"/>
+  <text x="878" y="162" class="section">BNN CORE</text>
+  <path d="M796 677 H836 V235 H880" class="wireCool"/>
+  <rect x="880" y="194" width="816" height="82" rx="3" class="box" stroke="#79a6bd"/>
+  <text x="1288" y="228" class="label" text-anchor="middle">Controller FSM</text>
+  <text x="1288" y="256" class="small" text-anchor="middle">FETCH · COMPUTE · WRITE · ADVANCE</text>
+  <path d="M998 276 V328 M1288 276 V328 M1558 276 V328" class="wirePlain"/>
+  <rect x="880" y="330" width="236" height="118" rx="3" class="box" stroke="#7da8b5"/>
+  <text x="998" y="373" class="body" text-anchor="middle">Activation</text><text x="998" y="401" class="body" text-anchor="middle">Ping-Pong A / B</text>
+  <text x="998" y="430" class="small" text-anchor="middle">BIT-PACKED 32-BIT WORDS</text>
+  <rect x="1130" y="330" width="276" height="118" rx="3" class="box" stroke="#82a8aa"/>
+  <text x="1268" y="372" class="body" text-anchor="middle">16 × 2 KiB SRAM</text><text x="1268" y="400" class="body" text-anchor="middle">Weight Banks</text>
+  <text x="1268" y="430" class="small" text-anchor="middle">TWO BANKS PER PE</text>
+  <rect x="1420" y="330" width="276" height="118" rx="3" class="box" stroke="#82a6a0"/>
+  <text x="1558" y="373" class="body" text-anchor="middle">Threshold Buffer × 8</text><text x="1558" y="405" class="small" text-anchor="middle">SIGNED 12-BIT</text>
+  <path d="M998 448 V500 M1268 448 V500 M1558 448 V500" class="wireCool"/>
+  <rect x="880" y="502" width="816" height="184" rx="3" fill="#080a0c" stroke="#d0a078" stroke-width="2.5"/>
+  <text x="908" y="535" class="section">8 PARALLEL PROCESSING ELEMENTS</text>
+  <rect x="908" y="558" width="142" height="88" rx="2" class="box" stroke="#d79070"/><text x="979" y="610" class="body" text-anchor="middle">XNOR</text>
+  <path d="M1050 602 H1080" class="wireWarm"/>
+  <rect x="1082" y="558" width="164" height="88" rx="2" class="box" stroke="#d39a72"/><text x="1164" y="594" class="body" text-anchor="middle">Popcount</text><text x="1164" y="622" class="body" text-anchor="middle">Tree</text>
+  <path d="M1246 602 H1276" class="wireWarm"/>
+  <rect x="1278" y="558" width="174" height="88" rx="2" class="box" stroke="#cba078"/><text x="1365" y="610" class="body" text-anchor="middle">Accumulator</text>
+  <path d="M1452 602 H1482" class="wireWarm"/>
+  <rect x="1484" y="558" width="184" height="88" rx="2" class="box" stroke="#bca585"/><text x="1576" y="610" class="body" text-anchor="middle">Comparator</text>
+  <path d="M1080 686 V738 M1496 686 V738" class="wireCool"/>
+  <rect x="880" y="740" width="400" height="108" rx="3" class="box" stroke="#8ca5a2"/>
+  <text x="1080" y="784" class="body" text-anchor="middle">Bit-Packed Output Writer</text><text x="1080" y="816" class="small" text-anchor="middle">NEXT-LAYER ACTIVATIONS</text>
+  <rect x="1296" y="740" width="400" height="108" rx="3" class="box" stroke="#83a5ae"/>
+  <text x="1496" y="784" class="body" text-anchor="middle">Score Registers × 10</text><text x="1496" y="816" class="small" text-anchor="middle">FINAL-LAYER ACCUMULATORS</text>
+  <path d="M880 794 H860 V389 H880" class="wireCool"/>
+  <text x="898" y="918" class="meta">ON-CHIP DATA REUSE</text>
+  <text x="1155" y="918" class="meta">PIPELINED XNOR–POPCOUNT</text>
+  <text x="1494" y="918" class="meta">8 PEs · 16 SRAM MACROS</text>
 
-  <rect x="104" y="190" width="260" height="108" rx="3" class="box" stroke="#dc8772"/>
-  <text x="234" y="238" class="label" text-anchor="middle">PicoRV32 CPU</text>
-  <text x="234" y="268" class="tiny" text-anchor="middle">FIRMWARE + NETWORK DESCRIPTORS</text>
-
-  <path d="M234 298 V338" class="wireWarm"/>
-  <rect x="104" y="340" width="260" height="104" rx="3" class="box" stroke="#d98c74"/>
-  <text x="234" y="383" class="small" text-anchor="middle">System Bus</text>
-  <text x="234" y="411" class="small" text-anchor="middle">+ Address Decode</text>
-
-  <path d="M234 444 V486 M147 486 H321" class="wirePlain"/>
-  <path d="M147 486 V506 M234 486 V506 M321 486 V506" class="wirePlain"/>
-
-  <rect x="104" y="508" width="82" height="128" rx="3" class="box" stroke="#c98d79"/>
-  <text x="145" y="558" class="small" text-anchor="middle">Program</text>
-  <text x="145" y="584" class="small" text-anchor="middle">RAM</text>
-
-  <rect x="193" y="508" width="82" height="128" rx="3" class="box" stroke="#bd927e"/>
-  <text x="234" y="558" class="small" text-anchor="middle">Input</text>
-  <text x="234" y="584" class="small" text-anchor="middle">BRAM</text>
-
-  <rect x="282" y="508" width="82" height="128" rx="3" class="box" stroke="#b09686"/>
-  <text x="323" y="548" class="small" text-anchor="middle">Threshold</text>
-  <text x="323" y="574" class="small" text-anchor="middle">BRAM</text>
-
-  <text x="234" y="776" class="tiny" text-anchor="middle">MEMORY-MAPPED HOST INTERFACE</text>
-
-  <!-- Control -->
-  <rect x="414" y="126" width="330" height="742" rx="4" fill="none" stroke="#b29a89" stroke-width="2"/>
-  <text x="438" y="160" class="section">CONTROL</text>
-
-  <path d="M364 392 H452" class="wireWarm"/>
-  <text x="408" y="378" class="micro" text-anchor="middle">AXI4-LITE</text>
-
-  <rect x="442" y="190" width="274" height="108" rx="3" class="box" stroke="#b99a87"/>
-  <text x="579" y="238" class="label" text-anchor="middle">AXI4-Lite Wrapper</text>
-  <text x="579" y="268" class="tiny" text-anchor="middle">CONFIGURATION + STATUS</text>
-
-  <path d="M579 298 V332" class="wireWarm"/>
-  <rect x="442" y="334" width="130" height="126" rx="3" class="box" stroke="#b09c8d"/>
-  <text x="507" y="382" class="small" text-anchor="middle">Control /</text>
-  <text x="507" y="409" class="small" text-anchor="middle">Status</text>
-  <text x="507" y="435" class="tiny" text-anchor="middle">START · BUSY · DONE</text>
-
-  <rect x="586" y="334" width="130" height="126" rx="3" class="box" stroke="#a59f94"/>
-  <text x="651" y="374" class="small" text-anchor="middle">16-entry</text>
-  <text x="651" y="401" class="small" text-anchor="middle">Descriptor</text>
-  <text x="651" y="428" class="small" text-anchor="middle">Table</text>
-
-  <path d="M579 460 V502" class="wireWarm"/>
-  <rect x="442" y="504" width="274" height="132" rx="3" class="box" stroke="#9ca398"/>
-  <text x="579" y="556" class="label" text-anchor="middle">Layer Sequencer</text>
-  <text x="579" y="586" class="small" text-anchor="middle">Autonomous multi-layer execution</text>
-  <text x="579" y="614" class="tiny" text-anchor="middle">CURRENT · FIRST · LAST · NEXT</text>
-
-  <text x="579" y="776" class="tiny" text-anchor="middle">SOFTWARE CONFIGURES ONCE</text>
-  <text x="579" y="800" class="tiny" text-anchor="middle">HARDWARE RUNS AUTONOMOUSLY</text>
-
-  <!-- Core -->
-  <rect x="768" y="126" width="754" height="742" rx="4" fill="none" stroke="url(#coreStroke)" stroke-width="2.5"/>
-  <text x="792" y="160" class="section">BNN CORE</text>
-
-  <path d="M716 244 H812" class="wireCool"/>
-  <text x="764" y="229" class="micro" text-anchor="middle">DESCRIPTOR</text>
-
-  <rect x="812" y="190" width="666" height="82" rx="3" class="box" stroke="#79a6bd"/>
-  <text x="1145" y="226" class="label" text-anchor="middle">Controller FSM</text>
-  <text x="1145" y="252" class="tiny" text-anchor="middle">FETCH → COMPUTE → WRITE → NEXT LAYER</text>
-
-  <path d="M902 272 V324 M1145 272 V324 M1380 272 V324" class="wirePlain"/>
-
-  <rect x="792" y="326" width="220" height="116" rx="3" class="box" stroke="#7da8b5"/>
-  <text x="902" y="374" class="small" text-anchor="middle">Activation Ping-Pong</text>
-  <text x="902" y="402" class="small" text-anchor="middle">Buffers A / B</text>
-  <text x="902" y="425" class="tiny" text-anchor="middle">BIT-PACKED 32-BIT WORDS</text>
-
-  <rect x="1025" y="326" width="240" height="116" rx="3" class="box" stroke="#82a8aa"/>
-  <text x="1145" y="368" class="small" text-anchor="middle">16 × 2 KiB SRAM</text>
-  <text x="1145" y="396" class="small" text-anchor="middle">Weight Banks</text>
-  <text x="1145" y="423" class="tiny" text-anchor="middle">TWO BANKS PER PE</text>
-
-  <rect x="1278" y="326" width="220" height="116" rx="3" class="box" stroke="#82a6a0"/>
-  <text x="1388" y="374" class="small" text-anchor="middle">Threshold Buffer</text>
-  <text x="1388" y="402" class="small" text-anchor="middle">× 8</text>
-  <text x="1388" y="425" class="tiny" text-anchor="middle">SIGNED 12-BIT</text>
-
-  <path d="M902 442 V486 M1145 442 V486 M1388 442 V486" class="wireCool"/>
-
-  <rect x="792" y="488" width="706" height="174" rx="3" fill="#080a0c" stroke="#d0a078" stroke-width="2.5"/>
-  <text x="816" y="518" class="section">8 PARALLEL PROCESSING ELEMENTS</text>
-
-  <rect x="818" y="542" width="122" height="82" rx="2" class="box" stroke="#d79070"/>
-  <text x="879" y="591" class="small" text-anchor="middle">XNOR</text>
-
-  <path d="M940 583 H970" class="wireWarm"/>
-  <rect x="972" y="542" width="150" height="82" rx="2" class="box" stroke="#d39a72"/>
-  <text x="1047" y="576" class="small" text-anchor="middle">Popcount</text>
-  <text x="1047" y="602" class="small" text-anchor="middle">Tree</text>
-
-  <path d="M1122 583 H1152" class="wireWarm"/>
-  <rect x="1154" y="542" width="150" height="82" rx="2" class="box" stroke="#cba078"/>
-  <text x="1229" y="591" class="small" text-anchor="middle">Accumulator</text>
-
-  <path d="M1304 583 H1334" class="wireWarm"/>
-  <rect x="1336" y="542" width="136" height="82" rx="2" class="box" stroke="#bca585"/>
-  <text x="1404" y="591" class="small" text-anchor="middle">Comparator</text>
-
-  <path d="M1044 662 V708 M1342 662 V708" class="wireCool"/>
-  <rect x="792" y="710" width="348" height="104" rx="3" class="box" stroke="#8ca5a2"/>
-  <text x="966" y="754" class="small" text-anchor="middle">Bit-Packed Output Writer</text>
-  <text x="966" y="782" class="tiny" text-anchor="middle">NEXT-LAYER ACTIVATIONS</text>
-
-  <rect x="1152" y="710" width="346" height="104" rx="3" class="box" stroke="#83a5ae"/>
-  <text x="1325" y="754" class="small" text-anchor="middle">Score Registers × 10</text>
-  <text x="1325" y="782" class="tiny" text-anchor="middle">FINAL-LAYER ACCUMULATORS</text>
-
-  <path d="M792 762 H770 V384 H792" class="wireCool"/>
-  <path d="M1152 792 H742 V700 H716" class="wireCool"/>
-
-  <text x="800" y="895" class="meta">ON-CHIP DATA REUSE</text>
-  <text x="1025" y="895" class="meta">PIPELINED XNOR–POPCOUNT</text>
-  <text x="1310" y="895" class="meta">8 PEs · 16 SRAM MACROS</text>
-
-  <text x="50" y="960" class="tiny">DESCRIPTOR-DRIVEN · SRAM-BACKED · FULLY PLACED AND ROUTED IN SKY130</text>
-  <text x="1550" y="960" class="tiny" text-anchor="end">Johan Anil · HolyAccel</text>
+  <text x="52" y="1090" class="small">DESCRIPTOR-DRIVEN · SRAM-BACKED · PLACED AND ROUTED IN SKY130</text>
+  <text x="1748" y="1090" class="small" text-anchor="end">Johan Anil · HolyAccel</text>
 </svg>

@@ -12,18 +12,18 @@ dst = args.output
 dst.mkdir(parents=True, exist_ok=True)
 
 colors = {
-    # GDS carries geometry, not display colors.  Use a neutral material palette
-    # so the video reads as layout geometry instead of a themed infographic.
-    "li1": (174, 174, 170),
-    "met1": (235, 235, 230),
-    "via1": (128, 128, 124),
-    "met2": (224, 217, 197),
-    "via2": (137, 132, 120),
-    "met3": (220, 196, 167),
-    "via3": (139, 122, 102),
-    "met4": (205, 168, 132),
-    "via4": (130, 104, 79),
-    "met5": (232, 188, 107),
+    # GDS carries geometry, not display colors. These restrained display colors
+    # distinguish routing levels without creating an artificial overall theme.
+    "li1": (174, 178, 181),
+    "met1": (92, 157, 160),
+    "via1": (145, 145, 138),
+    "met2": (132, 167, 119),
+    "via2": (142, 139, 116),
+    "met3": (207, 169, 83),
+    "via3": (151, 119, 83),
+    "met4": (195, 108, 76),
+    "via4": (143, 88, 77),
+    "met5": (179, 94, 126),
 }
 
 for name, color in colors.items():

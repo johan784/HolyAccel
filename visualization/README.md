@@ -1,6 +1,6 @@
 # GDS layer visualization
 
-This pipeline turns the actual LI1–M5 and via masks from `bnn_core_final.gds` into an interactive 3D layer explorer and a text-free 20-second orbit video. The video uses a neutral black background with no grid, stars, scan lines, labels, artificial plane borders, or neon bloom: every visible foreground shape comes from extracted GDS geometry. Display colors and vertical layer separation are illustrative because GDS stores geometry rather than physical color or height.
+This pipeline turns the actual LI1–M5 and via masks from `bnn_core_final.gds` into an interactive 3D layer explorer and a text-free 24-second layer tour. The video begins with the complete top-down layout, isolates one routing group at a time (`LI1 + M1`, then each via with the metal above it), gently reveals and explodes the full stack, and finally collapses back into the top-down GDS. The background is neutral black with no grid, stars, scan lines, labels, artificial plane borders, or neon bloom: every visible foreground shape comes from extracted GDS geometry. Display colors and vertical layer separation are illustrative because GDS stores geometry rather than physical color or height.
 
 ## Dependencies
 

@@ -29,6 +29,26 @@ The long-term objective is to evolve this project from a Binary Neural Network a
 
 ---
 
+# SKY130 ASIC Physical Implementation
+
+The [`asic-sky130`](https://github.com/johan784/HolyAccel/tree/asic-sky130) branch replaces the RTL weight bank with 16 hard SRAM macros and takes the accelerator core through an experimental **RTL-to-GDSII physical-design flow** using Yosys, OpenROAD, KLayout and the SkyWater SKY130 HD platform.
+
+The completed OpenROAD run produced:
+
+- **65,423** placed logic and clock cells before filler insertion
+- **16 × 2 KiB** Sky130 SRAM macros
+- **15.41 mm²** core area with **37.6%** post-CTS utilization
+- **7,382,423 µm** of routed wire and **668,771** vias
+- **0** remaining OpenROAD detailed-router violations
+
+A preliminary OpenSTA experiment at the typical 1.8 V, 25°C corner met a **50 MHz trial constraint** with **+2.125 ns setup WNS**, **+0.445 ns hold WNS** and zero setup TNS. Vectorless power estimation produced an approximate total of **160 mW**. These use placement-estimated parasitics and default activity assumptions; they are not extracted, workload-annotated signoff results.
+
+> **Signoff status:** OpenROAD detailed routing completed with zero internal router violations. Representative external KLayout BEOL/OFFGRID regions were checked, but full-chip foundry-qualified DRC and LVS have not completed. This is a physical-design learning result, not a tapeout-ready signoff claim.
+
+The branch contains the [physical-design flow](https://github.com/johan784/HolyAccel/tree/asic-sky130/asic), [reports](https://github.com/johan784/HolyAccel/tree/asic-sky130/asic/reports) and [GDS visualization pipeline](https://github.com/johan784/HolyAccel/tree/asic-sky130/visualization).
+
+---
+
 # Project Goals
 
 - Build a configurable Binary Neural Network accelerator
@@ -41,6 +61,12 @@ The long-term objective is to evolve this project from a Binary Neural Network a
 ---
 
 # System Architecture
+
+<p align="center">
+  <img src="docs/assets/holyaccel_architecture.png" alt="HolyAccel BNN accelerator system architecture" width="100%">
+</p>
+
+The PicoRV32 host configures the accelerator through a memory-mapped AXI4-Lite wrapper. A 16-entry descriptor table then lets the BNN core sequence layers autonomously while ping-pong buffers feed eight parallel XNOR-popcount processing elements. The diagram shows the SRAM-backed architecture implemented on the `asic-sky130` branch.
 
 ## High-Level SoC Topology
 
@@ -423,8 +449,8 @@ Each module is verified independently before integration.
 - ✅ PyTorch model trainer (with distillation)
 - ✅ Automated descriptor generation (network.json)
 - FPGA optimization (timing closure, BRAM inference)
-- ASIC-oriented implementation
-- Physical design exploration using the SkyWater SKY130 PDK with OpenLane/OpenROAD
+- ✅ Experimental SRAM-backed SKY130 RTL-to-GDSII implementation
+- Full-chip DRC/LVS signoff and extracted post-route timing analysis
 - Evaluate a reduced configuration suitable for TinyTapeout
 - Replace flip-flop weight bank with ROM macro for silicon
 

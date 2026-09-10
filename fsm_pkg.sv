@@ -14,4 +14,4 @@ typedef enum logic [4:0] {
     READY
 } state_t;
 
-endpackage;  
+endpackage 

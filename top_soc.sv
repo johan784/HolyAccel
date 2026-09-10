@@ -247,8 +247,11 @@ always_comb begin
 end 
 
 // Simulation Hex Preloader
+// Simulation Hex Preloader (paths relative to where you run make)
 initial begin
-    $readmemh("bram_init.hex", bram);
+    $readmemh("bram_init.hex",            bram);     // RISC-V firmware (existing)
+    $readmemh("models/inp_bram.hex", inp_bram); // input activations
+    $readmemh("models/th_bram.hex",  th_bram);  // thresholds
 end
 
 endmodule 

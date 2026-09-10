@@ -1,0 +1,24 @@
+violation type: Vertical congestion
+	srcs: net:_06555_ net:_20511_ net:_26298_ net:net681 net:net1260 net:net1290 net:net1456 net:net1520 net:net1539 net:net1976 net:net2036 net:net2046 net:net2313 net:net5485 net:net5513 net:net6979 net:clknet_0_clk_regs
+	comment: capacity:17 usage:18 overflow:1
+	bbox = (1890.6000, 2249.4000) - (1897.5000, 2256.3000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_21959_ net:_22399_ net:_23348_ net:_24655_ net:net632 net:net1260 net:net1555 net:net1660 net:net1684 net:net1818 net:net1889 net:net2079 net:net2177 net:net3054 net:net5889 net:net5893 net:clknet_0_clk_regs
+	comment: capacity:17 usage:18 overflow:1
+	bbox = (1863.0000, 2049.3000) - (1869.9000, 2056.2000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_21959_ net:_23348_ net:_24655_ net:net632 net:net989 net:net1260 net:net1555 net:net1660 net:net1684 net:net1818 net:net1889 net:net2079 net:net2177 net:net3054 net:net5889 net:net5893 net:clknet_0_clk_regs
+	comment: capacity:17 usage:18 overflow:1
+	bbox = (1863.0000, 2042.4000) - (1869.9000, 2049.3000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_21959_ net:_24424_ net:net1660 net:net1684 net:net1818 net:net1889 net:net1900 net:net1985 net:net2487 net:net5889 net:net5893 net:clknet_0_clk_regs
+	comment: capacity:12 usage:13 overflow:1
+	bbox = (1863.0000, 2118.3000) - (1869.9000, 2125.2000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_21959_ net:_24655_ net:net629 net:net1414 net:net1555 net:net1660 net:net1684 net:net1818 net:net1889 net:net1896 net:net2012 net:net2042 net:net2177 net:net2487 net:net5889 net:net5893 net:clknet_0_clk_regs
+	comment: capacity:17 usage:18 overflow:1
+	bbox = (1863.0000, 2090.7000) - (1869.9000, 2097.6000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_20804_ net:_21959_ net:_22399_ net:_24655_ net:net632 net:net1555 net:net1660 net:net1684 net:net1818 net:net1889 net:net2012 net:net2079 net:net2177 net:net2487 net:net5889 net:net5893 net:clknet_0_clk_regs
+	comment: capacity:17 usage:18 overflow:1
+	bbox = (1863.0000, 2063.1000) - (1869.9000, 2070.0000) on Layer -

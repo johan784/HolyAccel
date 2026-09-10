@@ -1,4 +1,4 @@
-parameter int MAX_LAYERS = 16;
+
 
 import fsm_pkg::*;
 import constants_pkg::*;
@@ -34,7 +34,11 @@ module bnn_core (
     
 
     
-    input layer_desc_t current_desc
+    input  logic [31:0]  current_desc_input_base,
+    input  logic [31:0]  current_desc_weight_base,
+    input  logic [31:0]  current_desc_threshold_base,
+    input  logic [15:0]  current_desc_input_words,
+    input  logic [15:0]  current_desc_output_neurons
     
 );
 
@@ -50,9 +54,12 @@ logic [$clog2(NUM_PE+1)-1:0] BATCH_PE;
 
 logic [$clog2(MAX_NEURONS):0] neuron_idx;
 
-logic [11:0] accum_out [0:MAX_NEURONS-1];
+(* keep *) logic [11:0] accum_out [0:MAX_NEURONS-1];
 
 logic signed [11:0] pe_accum [0:NUM_PE-1];
+
+ 
+
 
 
 logic [31:0] input_words;
@@ -67,33 +74,80 @@ logic [31:0] in_ptr_reg;
 
 logic [31:0] thr_ptr_reg;
 
+
+
 logic act_select;
 logic wt_select;
 
 
 // internal State Registers
-state_t state;
+logic [4:0] state;
    
 logic [WORD_WIDTH-1:0]    word_idx;     // Tracks 0..(TOTAL_WORDS-1)
 logic [WORD_WIDTH-1:0]    activ_word_idx;
-
-
-logic [31:0] weight_bank
-             [0:NUM_PE-1]
-             [0:MAX_NEURONS_PER_BANK-1]
-             [0:TOTAL_WORDS-1];
+logic [9:0] wt_shared_addr;                  
 
 
 
+
+
+
+    
+    integer file, status, n;
+    logic [31:0] hex_line;
+    logic [31:0] sram_init_din;
+    logic [9:0] init_addr;
+    
+
+
+    
+`ifndef SYNTHESIS
+    initial begin
+        sram_init_we = 1'b0;
+        sram_init_ce = 1'b0;
+        sram_init_din = '0;
+        
+        file = $fopen("models/weight_bank.hex", "r");
+        if (!file) $fatal(1, "Cannot open weight_bank.hex!");
+
+       
+        sram_init_we = 1'b1;
+        sram_init_ce = 1'b1;
+        
+        for (n = 0; n < 1024; n++) begin
+            status = $fscanf(file, "%h\n", hex_line);
+            init_addr = n[9:0]; // Drive the 10-bit address
+            sram_init_din = hex_line; 
+            
+          
+            @(posedge clk); 
+        end
+        
+        sram_init_we = 1'b0;
+        sram_init_ce = 1'b0;
+        $fclose(file);
+        $display("SUCCESS: Loaded 1024 words into 16 SRAM macros.");
+
+        
+    end
+`endif
+
+
+`ifdef SYNTHESIS
+always_comb begin
+    sram_init_ce = 1'b0;   // Port 0 chip-select off  (csb0 = 1)
+    sram_init_we = 1'b0;   // Port 0 write off        (web0 = 1)
+end
+`endif
    
 
-logic [31:0] activation_buffer_A [0:TOTAL_WORDS-1];
-logic [31:0] activation_buffer_B [0:TOTAL_WORDS-1];
+(* keep *) logic [31:0] activation_buffer_A [0:TOTAL_WORDS-1];
+(* keep *) logic [31:0] activation_buffer_B [0:TOTAL_WORDS-1];
 
-logic [31:0] weights_buffer_A [0:NUM_PE-1][0:TOTAL_WORDS-1];
-logic [31:0] weights_buffer_B [0:NUM_PE-1][0:TOTAL_WORDS-1];
+(*keep *) logic [31:0] weights_buffer_A [0:NUM_PE-1][0:TOTAL_WORDS-1];
+(* keep *) logic  [31:0] weights_buffer_B [0:NUM_PE-1][0:TOTAL_WORDS-1];
 
-logic signed [ACCUM_WIDTH-1:0] threshold_buffer [0:NUM_PE-1];
+(* keep *) logic signed [ACCUM_WIDTH-1:0] threshold_buffer [0:NUM_PE-1];
 logic [4:0] weight_offset;
 
 genvar i;
@@ -104,7 +158,7 @@ integer g;
 
 
 
-generate 
+  generate 
     for(i=0;i<NUM_PE;i++) begin: pe_array
         processing_element pe (
                 .clk(clk),
@@ -128,8 +182,130 @@ generate
     end 
 endgenerate 
 
-// Extract the 1-bit binary output from each PE
+  
+    logic wt_issue; 
+    
+
+    
+
+    // --- SRAM Macro Instantiation ---
+                 
+    logic [31:0] wt_dout_0 [0:NUM_PE-1];         // Data out from Bank 0 (Words 0-511)
+    logic [31:0] wt_dout_1 [0:NUM_PE-1];         // Data out from Bank 1 (Words 512-1023)
+    logic sram_init_we;                          // Used ONLY by simulation preloader
+    logic sram_init_ce;     
+    
+    
+    assign wt_shared_addr = sram_init_ce ? init_addr : wt_rd_addr;                     // Used ONLY by simulation preloader
+
+    genvar p;
+generate
+    for (p = 0; p < NUM_PE; p++) begin : gen_sram_pe
+        // Bank 0: Words 0 to 511
+       (* keep *) sky130_sram_2kbyte_1rw1r_32x512_8 u_bank0 (
+            .clk0(clk), 
+            .csb0(~sram_init_ce),        // ON during init, asleep after
+            .web0(~sram_init_we),        // Write mode during init
+            .wmask0(4'hF), 
+            .addr0(wt_shared_addr[8:0]), 
+            .din0(sram_init_din),        // Data IN for preloader
+            .dout0(),                    // Unused (we read from Port 1)
+            
+            .clk1(clk), 
+            .csb1(1'b0),                 // ALWAYS ON (for compute reads)
+            .addr1(wt_shared_addr[8:0]), // FSM puts read address here
+            .dout1(wt_dout_0[p])      // FSM reads weights from here!
+            
+           
+        );
+        
+        // Bank 1: Words 512 to 1023
+        (* keep *) sky130_sram_2kbyte_1rw1r_32x512_8 u_bank1 (
+            .clk0(clk), 
+            .csb0(~sram_init_ce), 
+            .web0(~sram_init_we), 
+            .wmask0(4'hF), 
+            .addr0(wt_shared_addr[8:0]), 
+            .din0(sram_init_din), 
+            .dout0(), 
+            
+            .clk1(clk), 
+            .csb1(1'b0), 
+            .addr1(wt_shared_addr[8:0]), 
+            .dout1(wt_dout_1[p])        // FSM reads weights from here!
+            
+           
+        );
+    end
+endgenerate
+
+
+logic wt_rd_en;
+logic [9:0] wt_rd_addr;
+logic wt_fill_A;
+logic wt_rd_valid_q;
+logic [4:0] wt_rd_word_q;
+logic wt_rd_to_A_q;
+logic  [9:0] wt_rd_addr_q;
 logic [NUM_PE-1:0] pe_bit;
+ 
+always_comb begin 
+    wt_rd_en = 1'b0;
+    wt_rd_addr ='0;
+    wt_fill_A = wt_select;
+    case(state) 
+            INITIAL_FETCH_WEIGHTS: begin 
+                wt_rd_en =1'b1;
+                wt_rd_addr = {weight_offset + local_neuron_idx[4:0], word_idx[4:0]};
+                wt_fill_A = wt_select;
+
+            end 
+
+            COMPUTE: begin 
+                if(neuron_counter + BATCH_PE < output_neurons) begin 
+                    wt_rd_en =1'b1;
+                    wt_rd_addr = {weight_offset + local_neuron_idx[4:0] + 5'd1, word_idx[4:0]};
+                    wt_fill_A = ~wt_select;
+                end 
+            end 
+            default: ;
+    endcase 
+end 
+    always_ff @(posedge clk) begin
+        if (!rstn) begin
+            wt_rd_addr_q <= '0;
+            wt_rd_valid_q  <= 1'b0;
+            wt_rd_word_q   <= '0;
+            wt_rd_to_A_q   <= 1'b0;
+        end else begin
+            wt_rd_addr_q <= wt_rd_addr;
+            wt_rd_valid_q  <= wt_rd_en;
+            wt_rd_word_q   <= wt_rd_addr[4:0];
+            wt_rd_to_A_q   <= wt_fill_A;
+        end
+    end
+
+    always_ff @(posedge clk) begin
+        if (wt_rd_valid_q) begin
+            for (int g = 0; g < NUM_PE; g++) begin
+                if (g < BATCH_PE) begin
+                    if (wt_rd_to_A_q) weights_buffer_A[g][wt_rd_word_q] <= final_wt_dout[g];
+                    else              weights_buffer_B[g][wt_rd_word_q] <= final_wt_dout[g];
+                end
+            end
+        end
+    end
+
+
+    // If address >= 512, bit [9] is 1. Route to Bank 1, else Bank 0.
+    logic [31:0] final_wt_dout [0:NUM_PE-1];
+    generate
+        for (p = 0; p < NUM_PE; p++) begin : gen_mux
+            assign final_wt_dout[p] = (wt_rd_addr_q[9] == 1'b1) ? wt_dout_1[p] : wt_dout_0[p];
+        end
+    endgenerate
+
+
 
 always_comb begin
     for (int b = 0; b < NUM_PE; b++) begin
@@ -145,7 +321,7 @@ integer gn; // "Global Neuron" ID
 
 
 
-// --- Sequential Logic Block ---
+
 always_ff @(posedge clk) begin
 
     `ifdef BNN_DEBUG
@@ -185,6 +361,7 @@ always_ff @(posedge clk) begin
                     result     <= '0;
                     thresh_pe_idx <= '0;
                     wt_select <= '0;
+                    
 
 
                     act_select <= '0;
@@ -214,34 +391,63 @@ always_ff @(posedge clk) begin
                 CONFIG_LAYER: begin
                         `ifdef BNN_DEBUG
                            $display(">>> CONFIG_LAYER: weight_base = %0d, input_words = %0d, output_neurons = %0d", 
-                                current_desc.weight_base, current_desc.input_words, current_desc.output_neurons);
+                                current_desc_weight_base, current_desc_input_words, current_desc_output_neurons);
                         `endif
-                        in_ptr_reg         <= current_desc.input_base;
+                        in_ptr_reg         <= current_desc_input_base;
                         
-                        thr_ptr_reg        <= current_desc.threshold_base;
-                        input_words    <= current_desc.input_words;
-                        output_neurons <= current_desc.output_neurons;
+                        thr_ptr_reg        <= current_desc_threshold_base;
+                        input_words    <= current_desc_input_words;
+                        output_neurons <= current_desc_output_neurons;
                         word_idx       <= '0;
                         neuron_idx     <= '0;
-                        weight_offset <= current_desc.weight_base[4:0];
+                        weight_offset <= current_desc_weight_base[4:0];
                         activ_word_idx <='0;
                         neuron_counter <='0;
                         thresh_pe_idx <='0;
     
 
-                        for (int w = 0; w < 8; w++) begin
-                            // Calculate how many 32-bit words this layer will output
-                            if (w < ((current_desc.output_neurons + 31) >> 5)) begin
-                                if (act_select) activation_buffer_B[w] <= '0;
-                                else            activation_buffer_A[w] <= '0;
-                            end 
-                        end
+                       
 
-                        inp_bram_addr <= current_desc.input_base;
-                        th_bram_addr  <= current_desc.threshold_base;
+
+                        // Replace the for-loop inside CONFIG_LAYER with this unrolled logic:
+                        if (0 < ((current_desc_output_neurons + 31) >> 5)) begin
+                            if (act_select) activation_buffer_B[0] <= '0;
+                            else            activation_buffer_A[0] <= '0;
+                        end 
+                        if (1 < ((current_desc_output_neurons + 31) >> 5)) begin
+                            if (act_select) activation_buffer_B[1] <= '0;
+                            else            activation_buffer_A[1] <= '0;
+                        end 
+                        if (2 < ((current_desc_output_neurons + 31) >> 5)) begin
+                            if (act_select) activation_buffer_B[2] <= '0;
+                            else            activation_buffer_A[2] <= '0;
+                        end 
+                        if (3 < ((current_desc_output_neurons + 31) >> 5)) begin
+                            if (act_select) activation_buffer_B[3] <= '0;
+                            else            activation_buffer_A[3] <= '0;
+                        end 
+                        if (4 < ((current_desc_output_neurons + 31) >> 5)) begin
+                            if (act_select) activation_buffer_B[4] <= '0;
+                            else            activation_buffer_A[4] <= '0;
+                        end 
+                        if (5 < ((current_desc_output_neurons + 31) >> 5)) begin
+                            if (act_select) activation_buffer_B[5] <= '0;
+                            else            activation_buffer_A[5] <= '0;
+                        end 
+                        if (6 < ((current_desc_output_neurons + 31) >> 5)) begin
+                            if (act_select) activation_buffer_B[6] <= '0;
+                            else            activation_buffer_A[6] <= '0;
+                        end 
+                        if (7 < ((current_desc_output_neurons + 31) >> 5)) begin
+                            if (act_select) activation_buffer_B[7] <= '0;
+                            else            activation_buffer_A[7] <= '0;
+                        end 
+
+                        inp_bram_addr <= current_desc_input_base;
+                        th_bram_addr  <= current_desc_threshold_base;
                         
-                        if (current_desc.output_neurons <= NUM_PE) begin
-                            BATCH_PE <= current_desc.output_neurons;
+                        if (current_desc_output_neurons <= NUM_PE) begin
+                            BATCH_PE <= current_desc_output_neurons;
                         end else begin
                         BATCH_PE <= NUM_PE;
                         end 
@@ -298,49 +504,19 @@ always_ff @(posedge clk) begin
 
                 INITIAL_FETCH_WEIGHTS: begin 
 
-                    
-
-                    // In INITIAL_FETCH_WEIGHTS, next to your other print:
-                    
-                        `ifdef BNN_DEBUG
-                            $display(">>> L1 CHECK: first weight word fetched = %h", weights_buffer_B[0][0]);
-                        `endif
-
-
-
-                    
-                    if(wt_select) begin
-                        for(g=0;g<BATCH_PE;g++) begin
-
-                               weights_buffer_A[g][word_idx]<=weight_bank[g][weight_offset + local_neuron_idx][word_idx];
-                        end
-
-                        word_idx <= word_idx +1;
-
                         if (word_idx == input_words - 1) begin
                             state    <= FETCH_THRESHOLDS;
                             word_idx <= '0;
-                        end
-
-                    end else begin
-                        for(g=0;g<BATCH_PE;g++) begin
-
-                                weights_buffer_B[g][word_idx] <= weight_bank[g][weight_offset + local_neuron_idx][word_idx];
-                        end
-
-                        word_idx <= word_idx + 1;
-
-                        if (word_idx == input_words - 1) begin
-                            state    <= FETCH_THRESHOLDS;
-                            word_idx <= '0;
-                        end
-                        
-                    end
+                        end else begin 
+                            word_idx <= word_idx  + 1;
+                        end 
                 end 
 
                  
 
                 FETCH_THRESHOLDS : begin 
+
+                    word_idx <=0;
 
                     // In FETCH_THRESHOLDS:
                     `ifdef BNN_DEBUG
@@ -362,35 +538,7 @@ always_ff @(posedge clk) begin
                 end
 
                 COMPUTE: begin
-
-                        // -------------------------------
-                        // PARALLEL PREFETCH
-                        // -------------------------------
-                        if(neuron_counter + BATCH_PE < output_neurons) begin 
-
-                            if (wt_select) begin
-                                // Compute is reading Buffer B
-                                // Prefetch next batch into Buffer A
-
-                                for (g = 0; g < BATCH_PE; g++) begin
-                                    weights_buffer_B[g][word_idx]
-                                        <= weight_bank[g][weight_offset+ local_neuron_idx + 1][word_idx];
-                                end
-                            end 
-                                else begin
-                                    // Compute is reading Buffer A
-                                    // Prefetch next batch into Buffer B
-
-                                    for (g = 0; g < BATCH_PE; g++) begin
-                                        weights_buffer_A[g][word_idx]
-                                            <= weight_bank[g][weight_offset + local_neuron_idx + 1][word_idx];
-                                    end
-
-                                end
-                            end
-                        
-
-                        // -------------------------------
+                         // -------------------------------
                         // COMPUTE PROGRESS
                         // -------------------------------
 
@@ -403,8 +551,6 @@ always_ff @(posedge clk) begin
                             local_neuron_idx <= local_neuron_idx + 1;
 
                             state <= LOAD_OUTPUT;
-
-                            
 
                         end
                         else begin
@@ -462,8 +608,8 @@ always_ff @(posedge clk) begin
                     end 
                     else begin 
                         // MORE BATCHES TO DO
-                        thr_ptr_reg <= current_desc.threshold_base + (neuron_counter + BATCH_PE) * 4;
-                        th_bram_addr <= current_desc.threshold_base + (neuron_counter + BATCH_PE) * 4;
+                        thr_ptr_reg <= current_desc_threshold_base + (neuron_counter + BATCH_PE) * 4;
+                        th_bram_addr <= current_desc_threshold_base + (neuron_counter + BATCH_PE) * 4;
                         thresh_pe_idx <= '0;
 
                         if ((output_neurons - (neuron_counter + BATCH_PE)) >= NUM_PE) begin 

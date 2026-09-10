@@ -9,3 +9,27 @@ data/
 # os + archives
 .DS_Store
 *.zip
+
+# Generated ASIC data and third-party checkouts
+out/
+pdk/
+orfs_repo/
+openram/
+gds_export_*/
+runs/
+netlist/
+synth/
+artifacts-*/
+*.log
+*.lyrdb
+*.lvsdb
+*.def
+*.gds
+*.spice
+
+# Re-generated visualization intermediates
+visualization/gds-layer-renders/
+visualization/gds-layer-textures/
+visualization/output/
+visualization/bnn-gds-layer-explorer.html
+asic/synthesis/*.syn.v

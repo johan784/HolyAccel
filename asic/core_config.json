@@ -1,0 +1,14 @@
+{
+  "DESIGN_NAME": "bnn_core",
+  "VERILOG_FILES": [
+    "dir::constants_pkg.sv",
+    "dir::fsm_pkg.sv",
+    "dir::layer_pkg.sv",
+    "dir::core_processing.sv",
+    "dir::bnn_core.sv"
+  ],
+  "CLOCK_PORT": "clk",
+  "CLOCK_PERIOD": 25.0,
+  "FP_CORE_UTIL": 50,
+  "PL_TARGET_DENSITY": 0.6
+}

@@ -1,0 +1,14 @@
+read_verilog -sv -DSYNTHESIS fsm_pkg.sv
+read_verilog -sv -DSYNTHESIS constants_pkg.sv
+read_verilog -sv -DSYNTHESIS layer_pkg.sv
+read_verilog -sv -DSYNTHESIS sram_bb.sv
+read_verilog -sv -DSYNTHESIS core_processing.sv
+read_verilog -sv -DSYNTHESIS bnn_core.sv
+hierarchy -check -top bnn_core
+synth -flatten -top bnn_core -noabc
+dfflibmap -liberty pdk/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty pdk/sky130_fd_sc_hd__tt_025C_1v80.lib
+clean
+delete t:$scopeinfo
+stat -liberty pdk/sky130_fd_sc_hd__tt_025C_1v80.lib
+write_verilog asic/synthesis/bnn_core.syn.v

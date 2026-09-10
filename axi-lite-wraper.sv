@@ -93,7 +93,11 @@ module bnn_axi_wrapper #(parameter int MAX_LAYERS = 16)(
         .next_layer (next_layer),
         .score_out (score_out),
         
-        .current_desc(current_desc)
+        .current_desc_input_base     (current_desc.input_base),
+        .current_desc_weight_base    (current_desc.weight_base),
+        .current_desc_threshold_base (current_desc.threshold_base),
+        .current_desc_input_words    (current_desc.input_words),
+        .current_desc_output_neurons (current_desc.output_neurons)
     );
 
     logic aw_ready, w_ready, b_valid;

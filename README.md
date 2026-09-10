@@ -29,6 +29,26 @@ The long-term objective is to evolve this project from a Binary Neural Network a
 
 ---
 
+# SKY130 ASIC Physical Implementation
+
+The `asic-sky130` branch extends the verified RTL into an experimental **RTL-to-GDS physical-design flow** using Yosys, OpenROAD, KLayout, the SkyWater SKY130 HD standard-cell library, and 16 hard SRAM macros.
+
+[![3D reconstruction of the routed GDS metal stack](docs/assets/bnn_core_gds_stack.webp)](docs/assets/bnn_core_gds_layer_orbit.mp4)
+
+The completed OpenROAD run produced:
+
+- 65,423 placed standard-cell instances
+- 16 × 2 KiB Sky130 SRAM macros arranged in two columns
+- 37.6% post-CTS placement utilization
+- 7,382,423 µm of routed wire and 668,771 vias
+- 0 remaining OpenROAD detailed-router violations
+
+The animation above is reconstructed from the actual LI1–M5 and via geometry in the generated GDS. The flow sources, constraints, reports, signoff experiments, and visualization pipeline are documented in [`asic/`](asic/) and [`visualization/`](visualization/).
+
+> **Signoff status:** OpenROAD detailed routing completed with zero internal router violations. Representative external KLayout BEOL/OFFGRID regions were checked, but full-chip foundry-qualified DRC and LVS have not completed. This branch is a physical-design learning result, not a tapeout-ready signoff claim.
+
+---
+
 # Project Goals
 
 - Build a configurable Binary Neural Network accelerator

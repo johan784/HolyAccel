@@ -62,6 +62,10 @@ The animation above is reconstructed from the actual LI1–M5 and via geometry i
 
 # System Architecture
 
+![HolyAccel BNN accelerator architecture](docs/holyaccel_architecture.png)
+
+The diagram above is available as an editable vector in [`docs/holyaccel_architecture.svg`](docs/holyaccel_architecture.svg).
+
 ## High-Level SoC Topology
 
 ```

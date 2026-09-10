@@ -4,7 +4,7 @@ import os
 import shutil
 import subprocess
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image
 
 W, H = 720, 900
 FPS, DURATION = 24, 20
@@ -17,16 +17,16 @@ OUT = Path(os.environ.get("OUTPUT_VIDEO", HERE / "output/BNN_Core_GDS_Slow_Layer
 OUT.parent.mkdir(parents=True, exist_ok=True)
 
 LAYER_SPECS = [
-    ("li1", "LI1", "LOCAL INTERCONNECT", (0, 245, 255)),
-    ("met1", "M1", "LOCAL ROUTING", (0, 205, 255)),
-    ("via1", "V1", "M1 → M2", (122, 244, 255)),
-    ("met2", "M2", "VERTICAL ROUTING", (76, 117, 255)),
-    ("via2", "V2", "M2 → M3", (164, 177, 255)),
-    ("met3", "M3", "HORIZONTAL ROUTING", (164, 79, 255)),
-    ("via3", "V3", "M3 → M4", (222, 168, 255)),
-    ("met4", "M4", "UPPER ROUTING", (255, 56, 172)),
-    ("via4", "V4", "M4 → M5", (255, 174, 219)),
-    ("met5", "M5", "TOP METAL", (255, 190, 47)),
+    ("li1", "LI1", "LOCAL INTERCONNECT", (174, 174, 170)),
+    ("met1", "M1", "LOCAL ROUTING", (235, 235, 230)),
+    ("via1", "V1", "M1 → M2", (128, 128, 124)),
+    ("met2", "M2", "VERTICAL ROUTING", (224, 217, 197)),
+    ("via2", "V2", "M2 → M3", (137, 132, 120)),
+    ("met3", "M3", "HORIZONTAL ROUTING", (220, 196, 167)),
+    ("via3", "V3", "M3 → M4", (139, 122, 102)),
+    ("met4", "M4", "UPPER ROUTING", (205, 168, 132)),
+    ("via4", "V4", "M4 → M5", (130, 104, 79)),
+    ("met5", "M5", "TOP METAL", (232, 188, 107)),
 ]
 
 textures = []
@@ -75,35 +75,9 @@ def perspective_coeffs(src, dst):
     inv /= inv[2,2]
     return tuple(inv.flatten()[:8])
 
-# Deterministic star field.
-rng = np.random.default_rng(7)
-stars = [(int(x), int(y), int(a)) for x,y,a in zip(rng.integers(0,W,90), rng.integers(0,H,90), rng.integers(12,58,90))]
-
 def background(frame_index):
-    yy, xx = np.mgrid[0:H,0:W]
-    d = np.sqrt(((xx-W*.49)/(W*.78))**2 + ((yy-H*.48)/(H*.76))**2)
-    glow = np.clip(1-d,0,1)[...,None]
-    base = np.zeros((H,W,3),dtype=np.float32)
-    base[:] = (2,5,8)
-    base += glow * np.array([7,22,35])
-    im = Image.fromarray(np.clip(base,0,255).astype(np.uint8),"RGB").convert("RGBA")
-    dr = ImageDraw.Draw(im,"RGBA")
-    for x,y,a in stars:
-        flicker = .7 + .3*math.sin(frame_index*.035+x*.03)
-        dr.ellipse((x,y,x+1,y+1),fill=(90,205,255,int(a*flicker)))
-    # Fine scan lines.
-    for y in range(0,H,6): dr.line((0,y,W,y),fill=(55,180,220,5),width=1)
-    return im
-
-def draw_grid(canvas, R, z=-.76):
-    dr=ImageDraw.Draw(canvas,"RGBA")
-    for i in range(-6,7):
-        a=np.array([[i/6*1.42,-1.42,z],[i/6*1.42,1.42,z]])
-        q,_=project(a,R,.98)
-        dr.line(tuple(q.flatten()),fill=(52,182,220,22),width=1)
-        b=np.array([[-1.42,i/6*1.42,z],[1.42,i/6*1.42,z]])
-        q,_=project(b,R,.98)
-        dr.line(tuple(q.flatten()),fill=(52,182,220,22),width=1)
+    # A neutral background keeps every visible pixel focused on GDS geometry.
+    return Image.new("RGBA", (W, H), (5, 5, 5, 255))
 
 def phase_state(t):
     # A deliberately slow, text-free camera tour.
@@ -139,7 +113,6 @@ def compose(frame_index):
     sep, rx, ry, rz, focus, ghost_opacity = phase_state(t)
     R=rotation(rx,ry,rz)
     canvas=background(frame_index)
-    draw_grid(canvas,R)
 
     src=np.array([[0,0],[619,0],[619,619],[0,619]],dtype=float)
     corner_xy=np.array([[-1,-1],[1,-1],[1,1],[-1,1]],dtype=float)
@@ -160,17 +133,17 @@ def compose(frame_index):
             layer.putalpha(a)
         coeff=perspective_coeffs(src,dst)
         warped=layer.transform((W,H),Image.Transform.PERSPECTIVE,coeff,Image.Resampling.BICUBIC)
-        if opacity>.2:
-            glow=warped.filter(ImageFilter.GaussianBlur(6))
-            ga=glow.getchannel("A").point(lambda p:int(p*.28))
-            glow.putalpha(ga)
-            canvas.alpha_composite(glow)
         canvas.alpha_composite(warped)
-        dr=ImageDraw.Draw(canvas,"RGBA")
-        poly=[tuple(p) for p in dst]
-        dr.line(poly+[poly[0]],fill=LAYER_SPECS[i][3]+(int(72*opacity),),width=1)
 
     return canvas.convert("RGB")
+
+sample_frame = os.environ.get("SAMPLE_FRAME")
+if sample_frame is not None:
+    sample_out = Path(os.environ.get("SAMPLE_OUTPUT", HERE / "output/layout-only-preview.png"))
+    sample_out.parent.mkdir(parents=True, exist_ok=True)
+    compose(int(sample_frame)).save(sample_out)
+    print(sample_out.resolve())
+    raise SystemExit(0)
 
 cmd=[FFMPEG,"-y","-f","rawvideo","-pix_fmt","rgb24","-s",f"{W}x{H}","-r",str(FPS),"-i","-","-an","-vf","scale=1080:1350:flags=lanczos","-c:v","libx264","-preset","medium","-crf","18","-pix_fmt","yuv420p","-movflags","+faststart",str(OUT)]
 proc=subprocess.Popen(cmd,stdin=subprocess.PIPE,stderr=subprocess.PIPE)

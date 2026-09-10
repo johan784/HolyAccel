@@ -1,6 +1,6 @@
 import argparse
 from pathlib import Path
-from PIL import Image, ImageEnhance, ImageFilter
+from PIL import Image, ImageEnhance
 
 HERE = Path(__file__).resolve().parent
 parser = argparse.ArgumentParser(description="Convert GDS layer masks into transparent textures.")
@@ -12,16 +12,18 @@ dst = args.output
 dst.mkdir(parents=True, exist_ok=True)
 
 colors = {
-    "li1": (0, 245, 255),
-    "met1": (0, 205, 255),
-    "via1": (122, 244, 255),
-    "met2": (76, 117, 255),
-    "via2": (164, 177, 255),
-    "met3": (164, 79, 255),
-    "via3": (222, 168, 255),
-    "met4": (255, 56, 172),
-    "via4": (255, 174, 219),
-    "met5": (255, 190, 47),
+    # GDS carries geometry, not display colors.  Use a neutral material palette
+    # so the video reads as layout geometry instead of a themed infographic.
+    "li1": (174, 174, 170),
+    "met1": (235, 235, 230),
+    "via1": (128, 128, 124),
+    "met2": (224, 217, 197),
+    "via2": (137, 132, 120),
+    "met3": (220, 196, 167),
+    "via3": (139, 122, 102),
+    "met4": (205, 168, 132),
+    "via4": (130, 104, 79),
+    "met5": (232, 188, 107),
 }
 
 for name, color in colors.items():
@@ -32,7 +34,3 @@ for name, color in colors.items():
     rgba = Image.new("RGBA", gray.size, color + (0,))
     rgba.putalpha(alpha)
     rgba.save(dst / f"{name}.webp", "WEBP", lossless=True, method=6)
-    # A blurred companion creates a controlled neon bloom behind each layer.
-    bloom = Image.new("RGBA", gray.size, color + (0,))
-    bloom.putalpha(alpha.filter(ImageFilter.GaussianBlur(2.2)).point(lambda p: int(p * 0.38)))
-    bloom.save(dst / f"{name}-glow.webp", "WEBP", lossless=True, method=6)

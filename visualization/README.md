@@ -1,6 +1,6 @@
 # GDS layer visualization
 
-This pipeline turns the actual LI1–M5 and via masks from `bnn_core_final.gds` into an interactive 3D layer explorer and a text-free 20-second orbit video.
+This pipeline turns the actual LI1–M5 and via masks from `bnn_core_final.gds` into an interactive 3D layer explorer and a text-free 20-second orbit video. The video uses a neutral black background with no grid, stars, scan lines, labels, artificial plane borders, or neon bloom: every visible foreground shape comes from extracted GDS geometry. Display colors and vertical layer separation are illustrative because GDS stores geometry rather than physical color or height.
 
 ## Dependencies
 
@@ -14,7 +14,8 @@ This pipeline turns the actual LI1–M5 and via masks from `bnn_core_final.gds` 
 Run from the repository root:
 
 ```bash
-python3 visualization/render_gds_layer_masks.py out/bnn_core_final.gds
+GDS_INPUT="$PWD/out/bnn_core_final.gds" \
+  klayout -z -nc -r visualization/render_gds_layer_masks.py
 python3 visualization/prepare_gds_textures.py
 python3 visualization/build_gds_stack_visualization.py
 python3 visualization/render_linkedin_gds_video.py

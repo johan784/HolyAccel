@@ -1,13 +1,21 @@
 import argparse
+import os
 from pathlib import Path
 import pya
 
 HERE = Path(__file__).resolve().parent
 parser = argparse.ArgumentParser(description="Render individual routing masks from a GDS file.")
-parser.add_argument("gds", type=Path, help="Input GDS containing the routed design")
-parser.add_argument("--output", type=Path, default=HERE / "gds-layer-renders")
+parser.add_argument("gds", nargs="?", type=Path, help="Input GDS containing the routed design")
+parser.add_argument("--output", type=Path, default=None)
 parser.add_argument("--size", type=int, default=900, help="Square image size in pixels")
-args = parser.parse_args()
+args, _ = parser.parse_known_args()
+if args.gds is None:
+    env_gds = os.environ.get("GDS_INPUT")
+    if not env_gds:
+        raise SystemExit("Pass a GDS path or set GDS_INPUT")
+    args.gds = Path(env_gds)
+if args.output is None:
+    args.output = Path(os.environ.get("LAYER_RENDER_DIR", HERE / "gds-layer-renders"))
 args.output.mkdir(parents=True, exist_ok=True)
 
 targets = [
